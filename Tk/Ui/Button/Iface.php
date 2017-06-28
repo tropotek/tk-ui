@@ -14,7 +14,7 @@ class Iface
     use \Tk\Dom\AttributesTrait;
     use \Tk\Dom\CssTrait;
 
-    /**
+    /** 
      * @var int
      */
     protected static $idx = 0;
