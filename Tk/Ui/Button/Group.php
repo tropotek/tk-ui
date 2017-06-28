@@ -24,7 +24,7 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
 
 
     /**
-     * Actions constructor.
+     * constructor.
      */
     public function __construct()
     {
@@ -37,6 +37,7 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
      * @return Iface
      */
     public function addButton($button) {
+        $button->set('group', $this);
         $this->setVisible(true);
         $this->buttonList->set($button->getId(), $button);
         return $button;
@@ -139,32 +140,9 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
         /** @var Iface $srcBtn */
         foreach ($this->buttonList as $srcBtn) {
             $btn = clone $srcBtn;
-            if ($btn->hasOnShow()) {
-                call_user_func_array($btn->getOnShow(), array($btn, $this));
-            }
+            $btnTemplate = $btn->show();
             if (!$btn->isVisible()) continue;
-            $row = $template->getRepeat('btn');
-
-            if ($btn->getUrl()) {
-                $row->setAttr('btn', 'href', $btn->getUrl());
-            } else {
-                $row->setAttr('btn', 'href', '#');
-            }
-            $row->setAttr('btn', 'title', $btn->getTitle());
-            $css = $btn->getCssString();
-            if (!$css) {
-                $css = 'btn-default';
-            }
-            $row->addCss('btn', $css);
-            if ($btn->getIcon()) {
-                $row->addCss('icon', $btn->getIcon());
-            } else if ($btn->getTitle()) {
-                $row->insertText('icon', $btn->getTitle());
-            }
-            if (count($btn->getAttrList())) {
-                $row->setAttr('btn', $btn->getAttrList());
-            }
-            $row->appendRepeat();
+            $template->appendTemplate('body', $btnTemplate);
         }
 
         return $template;
@@ -179,9 +157,7 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
     public function __makeTemplate()
     {
         $html = <<<HTML
-<div var="buttonGroup" class="tk-btn-group">
-  <a href="#" class="btn" title="" var="btn" repeat="btn"><i var="icon" class=""></i></a>
-</div>
+<div class="tk-btn-group" var="body"></div>
 HTML;
         return \Dom\Loader::load($html);
     }
