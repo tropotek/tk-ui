@@ -1,26 +1,18 @@
 <?php
-namespace Tk\Ui\Button;
+namespace Tk\Ui;
 
 /**
- * Class
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
+class ButtonGroup extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
 
     /**
      * @var \Tk\Collection
      */
     protected $buttonList = null;
-    
-    /**
-     * @var boolean
-     */
-    protected $visible = true;
-
 
 
     /**
@@ -33,20 +25,19 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
 
 
     /**
-     * @param Iface $button
-     * @return Iface
+     * @param Button $button
+     * @return Button
      */
     public function addButton($button) {
         $button->set('group', $this);
-        $this->setVisible(true);
         $this->buttonList->set($button->getId(), $button);
         return $button;
     }
 
     /**
-     * @param Iface $srcButton
-     * @param Iface $button
-     * @return Iface
+     * @param Button $srcButton
+     * @param Button $button
+     * @return Button
      */
     public function addButtonBefore($srcButton, $button)
     {
@@ -66,9 +57,9 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
     }
 
     /**
-     * @param Iface $srcButton
-     * @param Iface $button
-     * @return Iface
+     * @param Button $srcButton
+     * @param Button $button
+     * @return Button
      */
     public function addButtonAfter($srcButton, $button)
     {
@@ -89,7 +80,7 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
 
     /**
      * @param int $id
-     * @return null|Iface
+     * @return null|Button
      */
     public function findButton($id)
     {
@@ -97,38 +88,31 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
     }
 
     /**
-     * @param int|Iface $id
-     * @return null|Iface Return null if no button removed
+     * @param string $title
+     * @return null|Button
+     */
+    public function findButtonByTitle($title)
+    {
+        /** @var Button $button */
+        foreach ($this->buttonList as $button) {
+            if ($button->getTitle() == $title)
+                return $button;
+        }
+    }
+
+    /**
+     * @param int|Button $id
+     * @return null|Button Return null if no button removed
      */
     public function removeButton($id)
     {
-        if ($id instanceof Iface) $id = $id->getId();
+        if ($id instanceof Button) $id = $id->getId();
 
         if (!$this->buttonList->has($id)) return null;
         $button = $this->buttonList->get($id);
         $this->buttonList->remove($id);
         return $button;
     }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isVisible()
-    {
-        return $this->visible;
-    }
-
-    /**
-     * @param bool $visible
-     */
-    public function setVisible($visible)
-    {
-        $this->visible = $visible;
-    }
-
-
 
     /**
      * @return \Dom\Template
@@ -137,7 +121,7 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
     {
         $template = $this->getTemplate();
 
-        /** @var Iface $srcBtn */
+        /** @var Button $srcBtn */
         foreach ($this->buttonList as $srcBtn) {
             $btn = clone $srcBtn;
             $btnTemplate = $btn->show();
@@ -147,7 +131,6 @@ class Group extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInter
 
         return $template;
     }
-
 
     /**
      * makeTemplate

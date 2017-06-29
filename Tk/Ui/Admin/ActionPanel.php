@@ -9,7 +9,7 @@ namespace Tk\Ui\Admin;
  * @link http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
  */
-class ActionPanel extends \Tk\Ui\Button\Group
+class ActionPanel extends \Tk\Ui\ButtonGroup
 {
     /**
      * @var string
@@ -35,7 +35,7 @@ class ActionPanel extends \Tk\Ui\Button\Group
      * @param string $icon
      * @return static
      */
-    public static function create($title = 'Actions', $icon = 'fa-cogs')
+    public static function create($title = 'Actions', $icon = 'fa fa-cogs')
     {
         $obj = new static();
         if ($title) $obj->setTitle($title);
@@ -50,7 +50,7 @@ class ActionPanel extends \Tk\Ui\Button\Group
     {
         $template = parent::show();
         if ($this->title)
-            $template->insertText('title', ' ' .$this->title);
+            $template->insertText('text', $this->title);
         if ($this->icon)
             $template->addCss('icon', $this->icon);
         return $template;
@@ -65,8 +65,8 @@ class ActionPanel extends \Tk\Ui\Button\Group
     {
         $html = <<<HTML
 <div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel">
-  <div class="panel-heading" var="header">
-    <h4 class="panel-title" var="title"><i var="icon"></i> <span var="title"></span></h4>
+  <div class="panel-heading" var="heading">
+    <h4 class="panel-title" var="title"><i var="icon"></i> <span var="text"></span></h4>
   </div>
   <div class="panel-body" var="body"></div>
 </div>

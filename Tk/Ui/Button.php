@@ -1,15 +1,13 @@
 <?php
-namespace Tk\Ui\Button;
+namespace Tk\Ui;
 
 
 /**
- * Class Iface
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
  */
-class Iface
+class Button extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
     use \Tk\Dom\AttributesTrait;
     use \Tk\Dom\CssTrait;
@@ -55,28 +53,29 @@ class Iface
 
 
     /**
-     * Iface constructor.
+     * Button constructor.
      * @param string $title
      * @param null|\Tk\Url|string $url
-     * @param null|callable $onShow
+     * @param string $icon
      */
-    public function __construct($title, $url = '#', $onShow = null)
+    public function __construct($title, $url = '#', $icon = '')
     {
         $this->id = self::$idx++;
         $this->title = $title;
         $this->url = $url;
-        $this->onShow = $onShow;
+        $this->icon = $icon;
+        $this->addCss('btn btn-default');
     }
 
     /**
      * @param string $title
-     * @param null|\Tk\Uri $url
-     * @param null|callable $onShow
-     * @return Iface
+     * @param null|string|\Tk\Uri $url
+     * @param string $icon
+     * @return Button
      */
-    public static function create($title, $url = null, $onShow = null)
+    public static function create($title, $url = '#', $icon = '')
     {
-        $obj = new self($title, $url, $onShow);
+        $obj = new self($title, $url, $icon);
         return $obj;
     }
 
@@ -105,6 +104,7 @@ class Iface
         }
         if ($this->getIcon()) {
             $template->addCss('icon', $this->getIcon());
+            $template->setChoice('icon');
         }
         $css = $this->getCssString();
         if (!$css) {
@@ -123,7 +123,7 @@ class Iface
     public function __makeTemplate()
     {
         $html = <<<HTML
-<a href="#" class="btn" var="btn" choice="btn"><i var="icon" choice="icon"></i> <span var="title"></span></a>
+<a href="#" var="btn" choice="btn"><i var="icon" choice="icon"></i> <span var="title"></span></a>
 HTML;
         return \Dom\Loader::load($html);
     }
@@ -202,7 +202,7 @@ HTML;
     }
 
     /**
-     * function (\Tk\Ui\Button\Iface $button) {}
+     * function (\Tk\Ui\Button $button) {}
      *
      * @param callable|null $onShow
      */
