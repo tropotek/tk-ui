@@ -3,6 +3,10 @@ namespace Tk\Ui;
 
 
 /**
+ * <code>
+ *   \Tk\Ui\Button::create('Edit', \Tk\Uri::create('/dunno.html'), 'fa fa-edit)->addCss('btn-xs btn-success')->show();
+ * </code>
+ *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
