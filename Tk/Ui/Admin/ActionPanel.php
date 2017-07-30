@@ -21,6 +21,11 @@ class ActionPanel extends \Tk\Ui\ButtonGroup
      */
     protected $icon = '';
 
+    /**
+     * @var bool
+     */
+    protected $enabled = true;
+
 
     /**
      * constructor.
@@ -53,7 +58,25 @@ class ActionPanel extends \Tk\Ui\ButtonGroup
             $template->insertText('text', $this->title);
         if ($this->icon)
             $template->addCss('icon', $this->icon);
+        if ($this->isEnabled())
+            $template->setChoice('panel');
         return $template;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
     }
 
     /**
@@ -64,7 +87,7 @@ class ActionPanel extends \Tk\Ui\ButtonGroup
     public function __makeTemplate()
     {
         $html = <<<HTML
-<div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel">
+<div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel" choice="panel">
   <div class="panel-heading" var="heading">
     <h4 class="panel-title" var="title"><i var="icon"></i> <span var="text"></span></h4>
   </div>
