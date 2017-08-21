@@ -20,6 +20,7 @@ jQuery(function ($) {
     },
     renderEnd: function (e) {
       var cal = $(this).data('calendar');
+
       if (cal.getYear() !== currentYear) {
         currentYear = cal.getYear();
         $.getJSON($(this).data('src'), {
@@ -29,16 +30,21 @@ jQuery(function ($) {
         }, function (data) {
           var colorMax = '#5E92C0';
           var colorPlace = '#8cceff';
-          $.each(data, function (i, item) {
-            item.startDate = new Date(item.startDate);
-            item.endDate = new Date(item.endDate);
-            item.color = colorPlace;
-            if (item.total >= item.places) {
-              item.color = colorMax;
-            }
-          });
-          cal.setDataSource(data);
-
+          if (data.list.length) {
+            $.each(data.list, function (i, item) {
+              item.startDate = new Date(item.startDate);
+              item.endDate = new Date(item.endDate);
+              item.color = colorPlace;
+              if (item.total >= item.places) {
+                item.color = colorMax;
+              }
+            });
+            cal.setDataSource(data.list);
+          } else if (cal.tkFlag === undefined && data.first) {
+              cal.tkFlag = 'defined';
+              var year = parseInt(data.first.dateStart.date.substr(0, 4));
+              cal.setYear(year);
+          }
         });
       }
     },
