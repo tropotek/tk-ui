@@ -89,7 +89,7 @@ class ActionPanel extends \Tk\Ui\ButtonGroup
         $html = <<<HTML
 <div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel" choice="panel">
   <div class="panel-heading" var="heading">
-    <h4 class="panel-title" var="title"><i var="icon"></i> <span var="text"></span></h4>
+    <h4 class="panel-title" var="title"><span><i var="icon"></i> <span var="text"></span></span></h4>
   </div>
   <div class="panel-body" var="body"></div>
 </div>
