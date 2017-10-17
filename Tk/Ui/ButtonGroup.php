@@ -23,7 +23,6 @@ class ButtonGroup extends \Dom\Renderer\Renderer implements \Dom\Renderer\Displa
         $this->buttonList = new \Tk\Collection();
     }
 
-
     /**
      * @param Button $button
      * @return Button
