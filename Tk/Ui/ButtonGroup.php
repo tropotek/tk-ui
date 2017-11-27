@@ -94,7 +94,7 @@ class ButtonGroup extends \Dom\Renderer\Renderer implements \Dom\Renderer\Displa
     {
         /** @var Button $button */
         foreach ($this->buttonList as $button) {
-            if ($button->getTitle() == $title)
+            if ($button->getText() == $title)
                 return $button;
         }
     }
