@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 2.0.1 [2018-01-15]:
+-------------------------------
+ - Minor Code Updates
+ - Finished Animals Plugin... NEXT!!!!
+
+
 Ver 2.0.0 [2017-09-27]:
 -------------------------------
 
