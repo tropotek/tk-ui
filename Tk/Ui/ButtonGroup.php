@@ -17,10 +17,24 @@ class ButtonGroup extends \Dom\Renderer\Renderer implements \Dom\Renderer\Displa
 
     /**
      * constructor.
+     * @param array $buttons
      */
-    public function __construct()
+    public function __construct($buttons = array())
     {
         $this->buttonList = new \Tk\Collection();
+        foreach ($buttons as $b) {
+            $this->addButton($b);
+        }
+    }
+
+    /**
+     * @param array $buttons
+     * @return static
+     */
+    public static function create($buttons = array())
+    {
+        $obj = new static($buttons);
+        return $obj;
     }
 
     /**
