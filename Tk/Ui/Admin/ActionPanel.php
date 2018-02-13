@@ -9,7 +9,7 @@ namespace Tk\Ui\Admin;
  * @link http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
  */
-class ActionPanel extends \Tk\Ui\ButtonGroup
+class ActionPanel extends \Tk\Ui\ButtonCollection
 {
     /**
      * @var string

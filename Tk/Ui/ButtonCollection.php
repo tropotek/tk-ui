@@ -6,7 +6,7 @@ namespace Tk\Ui;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class ButtonGroup extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
+class ButtonCollection extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
 
     /**
