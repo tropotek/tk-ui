@@ -3,8 +3,6 @@ namespace Tk\Ui\Admin;
 
 
 /**
- * Class ActionPanel
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
@@ -27,13 +25,6 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
     protected $enabled = true;
 
 
-    /**
-     * constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * @param string $title
@@ -80,25 +71,6 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
     }
 
     /**
-     * makeTemplate
-     *
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        $html = <<<HTML
-<div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel" choice="panel">
-  <div class="panel-heading" var="heading">
-    <h4 class="panel-title" var="title"><span><i var="icon"></i> <span var="text"></span></span></h4>
-  </div>
-  <div class="panel-body" var="body"></div>
-</div>
-HTML;
-        return \Dom\Loader::load($html);
-    }
-
-
-    /**
      * @return string
      */
     public function getTitle()
@@ -133,5 +105,24 @@ HTML;
         $this->icon = $icon;
         return $this;
     }
+
+    /**
+     * makeTemplate
+     *
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        $html = <<<HTML
+<div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel" choice="panel">
+  <div class="panel-heading" var="heading">
+    <h4 class="panel-title" var="title"><span><i var="icon"></i> <span var="text"></span></span></h4>
+  </div>
+  <div class="panel-body" var="body"></div>
+</div>
+HTML;
+        return \Dom\Loader::load($html);
+    }
+
 
 }

@@ -16,13 +16,18 @@ class Button extends Link
 
     /**
      * @param string $text
-     * @param null|\Tk\Uri|string $url
+     * @param null|string|\Tk\Uri $url
      * @param string $icon
+     * @return static
      */
-    public function __construct($text, $url = null, $icon = '')
+    public static function create($text, $url = null, $icon = '')
     {
-        parent::__construct($text, $url, $icon);
-        $this->addCss('btn btn-default');
+        $obj = new static();
+        $obj->text = $text;
+        $obj->url = $url;
+        $obj->icon = $icon;
+        $obj->addCss('btn btn-default');
+        return $obj;
     }
 
 }
