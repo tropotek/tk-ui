@@ -25,7 +25,7 @@ jQuery(function ($) {
         currentYear = cal.getYear();
         $.getJSON($(this).data('src'), {
           companyId: $(this).data('companyid'),
-          courseId: $(this).data('courseid'),
+          subjectId: $(this).data('subjectid'),
           year: currentYear
         }, function (data) {
           var colorMax = '#5E92C0';
