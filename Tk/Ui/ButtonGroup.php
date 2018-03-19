@@ -19,6 +19,7 @@ class ButtonGroup extends ButtonCollection
      * Return an object that your framework can interpret and display.
      *
      * @return null|Template|Renderer
+     * @throws \Dom\Exception
      */
     public function show()
     {
