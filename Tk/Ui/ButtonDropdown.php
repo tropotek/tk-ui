@@ -9,7 +9,7 @@ use Dom\Template;
  * TODO: add the ability to create a seperator/divider `<li role="separator" class="divider"></li>`
  *
  * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
+ * @see http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
  */
 class ButtonDropdown extends ButtonCollection

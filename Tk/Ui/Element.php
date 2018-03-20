@@ -6,7 +6,7 @@ namespace Tk\Ui;
  * Use this interface for all button UI objects
  *
  * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
+ * @see http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
  */
 abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
