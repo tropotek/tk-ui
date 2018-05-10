@@ -91,10 +91,8 @@ class ButtonDropdown extends ButtonCollection
     public function show()
     {
         $template = parent::show();
-
         $space = '';
         if ($this->getIcon()) $space = ' ';
-
         if ($this->getText()) {
             $template->insertText('text', $space . $this->getText());
         }
@@ -102,16 +100,28 @@ class ButtonDropdown extends ButtonCollection
             $template->addCss('ico', $this->getIcon());
             $template->setChoice('ico');
         }
-
-
-        /** @var $btn Link */
-        foreach($this->linkList as $link) {
-            $tpl = $link->show();
-            $template->appendHtml('dropdown', '<li>' . $tpl->toString() . '</li>');
+        if (count($this->linkList) == 1) {
+            vd('TDOO');
+            /** @var \Tk\Ui\Link $link */
+            $link = current($this->linkList);
+            $template->setAttr('btn', 'href', $link->getUrl());
+            $template->addCss('btn', $this->getCssList());
+            $template->setAttr('btn', $this->getAttrList());
+            $template->removeClass('btn-group', 'btn-group');
+            $template->setChoice('btn');
+        } else {
+            /** @var $btn Link */
+            foreach($this->linkList as $link) {
+                $tpl = $link->show();
+                $template->appendHtml('dropdown-menu', '<li>' . $tpl->toString() . '</li>');
+            }
+//            $template->addCss('btn-group', $this->getCssList());
+//            $template->setAttr('btn-group', $this->getAttrList());
+            $template->addCss('dropdown', $this->getCssList());
+            $template->setAttr('dropdown', $this->getAttrList());
+            $template->setChoice('dropdown');
         }
 
-        $template->addCss('btn', $this->getCssList());
-        $template->setAttr('btn', $this->getAttrList());
 
         return $template;
     }
@@ -123,11 +133,12 @@ class ButtonDropdown extends ButtonCollection
     public function __makeTemplate()
     {
         $html = <<<HTML
-<div class="btn-group" var="btn">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="btn-group" var="btn-group">
+  <a href="#" class="btn btn-default" var="btn" choice="btn"><i var="ico" choice="ico"></i><span var="text">Action</span></a>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" choice="dropdown" var="dropdown">
     <i var="ico" choice="ico"></i><span var="text">Action</span> <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" var="dropdown">
+  <ul class="dropdown-menu" var="dropdown-menu" choice="dropdown">
     <!--<li><a href="#">Action</a></li>-->
     <!--<li><a href="#">Another action</a></li>-->
     <!--<li><a href="#">Something else here</a></li>-->
