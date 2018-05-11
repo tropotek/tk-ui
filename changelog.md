@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.4 [2018-05-11]:
+-------------------------------
+ - Dev.ttek.org
+
+
 Ver 2.0.3 [2018-05-11]:
 -------------------------------
  - Fixed Exception messages to include log
