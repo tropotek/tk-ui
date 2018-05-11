@@ -101,7 +101,6 @@ class ButtonDropdown extends ButtonCollection
             $template->setChoice('ico');
         }
         if (count($this->linkList) == 1) {
-            vd('TDOO');
             /** @var \Tk\Ui\Link $link */
             $link = current($this->linkList);
             $template->setAttr('btn', 'href', $link->getUrl());
