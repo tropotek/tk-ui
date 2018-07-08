@@ -6,8 +6,6 @@ use Dom\Template;
 
 
 /**
- * TODO: add the ability to create a seperator/divider `<li role="separator" class="divider"></li>`
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
@@ -86,7 +84,6 @@ class ButtonDropdown extends ButtonCollection
      * Return an object that your framework can interpret and display.
      *
      * @return null|Template|Renderer
-     * @throws \Dom\Exception
      */
     public function show()
     {
@@ -111,16 +108,16 @@ class ButtonDropdown extends ButtonCollection
         } else {
             /** @var $btn Link */
             foreach($this->linkList as $link) {
-                $tpl = $link->show();
-                $template->appendHtml('dropdown-menu', '<li>' . $tpl->toString() . '</li>');
+                //$tpl = $link->show();
+                //$template->appendHtml('dropdown-menu', '<li>' . $tpl->toString() . '</li>');
+                $item = $template->getRepeat('item');
+                $item->insertTemplate('item', $link->show());
+                $item->appendRepeat();
             }
-//            $template->addCss('btn-group', $this->getCssList());
-//            $template->setAttr('btn-group', $this->getAttrList());
             $template->addCss('dropdown', $this->getCssList());
             $template->setAttr('dropdown', $this->getAttrList());
             $template->setChoice('dropdown');
         }
-
 
         return $template;
     }
@@ -138,11 +135,7 @@ class ButtonDropdown extends ButtonCollection
     <i var="ico" choice="ico"></i><span var="text">Action</span> <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" var="dropdown-menu" choice="dropdown">
-    <!--<li><a href="#">Action</a></li>-->
-    <!--<li><a href="#">Another action</a></li>-->
-    <!--<li><a href="#">Something else here</a></li>-->
-    <!--<li role="separator" class="divider"></li>-->
-    <!--<li><a href="#">Separated link</a></li>-->
+    <li repeat="item" var="item"></li>
   </ul>
 </div>
 HTML;
