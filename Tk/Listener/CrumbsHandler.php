@@ -24,23 +24,21 @@ class CrumbsHandler implements Subscriber
         $this->renderEnabled = $renderEnabled;
     }
 
-
-
-    
     /**
      * @param \Tk\Event\ControllerEvent $event
      * @throws \Tk\Exception
      */
     public function onController(\Tk\Event\ControllerEvent $event)
     {
-        $crumbs = \Tk\Ui\Crumbs::getInstance();
+        $config = \Bs\Config::getInstance();
+        $crumbs = $config->getCrumbs();
         if (!$crumbs) throw new \Tk\Exception('Error creating crumb instance.');
 
         /** @var \Tk\Controller\Iface $controller */
         $controller = $event->getController();
         if ($controller instanceof \Tk\Controller\Iface) {
             // ignore adding crumbs if param in request URL
-            if ($controller->getRequest()->has(\Tk\Ui\Crumbs::CRUMB_IGNORE)) {
+            if ($controller->getRequest()->has(\Tk\Crumbs::CRUMB_IGNORE)) {
                 return;
             }
             $title = $controller->getPageTitle();
@@ -54,13 +52,15 @@ class CrumbsHandler implements Subscriber
      */
     public function onShow(\Tk\Event\Event $event)
     {
+        $config = \Bs\Config::getInstance();
+
         if (!$this->renderEnabled) return;
         $controller = $event->get('controller');
         /** @var \Tk\Controller\Page $page */
         $page = $controller->getPage();
 
         if ($page instanceof \Tk\Controller\Page) {
-            $crumbs = \Tk\Ui\Crumbs::getInstance();
+            $crumbs = $config->getCrumbs();
             if (!$crumbs) return;
 
             $template = $page->getTemplate();
@@ -88,8 +88,10 @@ JS;
      */
     public function onFinishRequest(\Tk\Event\RequestEvent $event)
     {
-        $crumbs = \Tk\Ui\Crumbs::getInstance();
-        $crumbs->save();
+        $config = \Bs\Config::getInstance();
+        $crumbs = $config->getCrumbs();
+        if ($crumbs)
+            $crumbs->save();
     }
 
     /**
