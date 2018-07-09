@@ -91,38 +91,49 @@ class Crumbs extends \Dom\Renderer\Renderer
         return self::$instance;
     }
 
+
+
+
     /**
-     * @param string $homeTitle
-     * @param null|\Tk\Uri $url
-     * @return null|Crumbs If null returned then the crumbs were not reset
+     * @return $this
      * @throws \Exception
      */
-    public static function reset($homeTitle = 'Dashboard', $url = null)
+    public function reset()
     {
-        $crumbs = self::getInstance();
-        if ($crumbs && !\Tk\Config::getInstance()->getRequest()->has(self::CRUMB_IGNORE)) {
-            if (!$url) {
-                $homeTitle = self::$homeTitle;
-                $url = \Tk\Uri::create(self::$homeUrl);
-            }
-            $crumbs->getSession()->remove($crumbs->getSid());
-            $crumbs->setList();
-            $crumbs->addCrumb($homeTitle, $url);
-            $crumbs->save();
-            return $crumbs;
+        if (!\Tk\Config::getInstance()->getRequest()->has(self::CRUMB_IGNORE)) {
+            $homeTitle = self::$homeTitle;
+            $url = \Tk\Uri::create(self::$homeUrl);
+            $this->getSession()->remove($this->getSid());
+            $this->setList();
+            $this->addCrumb($homeTitle, $url);
+            $this->save();
         }
+        return $this;
     }
+
+//    public static function reset($homeTitle = 'Dashboard', $url = null)
+//    {
+//        $crumbs = self::getInstance();
+//        if ($crumbs && !\Tk\Config::getInstance()->getRequest()->has(self::CRUMB_IGNORE)) {
+//            if (!$url) {
+//                $homeTitle = self::$homeTitle;
+//                $url = \Tk\Uri::create(self::$homeUrl);
+//            }
+//            $crumbs->getSession()->remove($crumbs->getSid());
+//            $crumbs->setList();
+//            $crumbs->addCrumb($homeTitle, $url);
+//            $crumbs->save();
+//            return $crumbs;
+//        }
+//    }
 
 
     /**
      * save the state of the crumb stack to the session
      */
-    public static function save()
+    public function save()
     {
-        $crumbs = self::getInstance();
-        if ($crumbs) {
-            $crumbs->getSession()->set($crumbs->getSid(), $crumbs->getList());
-        }
+        $this->getSession()->set($this->getSid(), $this->getList());
     }
 
     /**
