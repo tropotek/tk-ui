@@ -5,7 +5,7 @@ namespace Tk;
 /**
  * Use this object to track and render a crumb stack
  *
- * See the controlling object \Uni\Listeners\CrumbsHandler to
+ * See the controlling object \Tk\Listeners\CrumbsHandler to
  * view its implementation.
  *
  *
@@ -13,7 +13,7 @@ namespace Tk;
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Crumbs extends \Dom\Renderer\Renderer
+class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
     /**
      * Request param: Reset the crumb stack
