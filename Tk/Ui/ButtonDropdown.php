@@ -104,6 +104,7 @@ class ButtonDropdown extends ButtonCollection
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
             $template->removeClass('btn-group', 'btn-group');
+            $template->setAttr('btn-group', 'style', 'display: inline-block;');
             $template->setChoice('btn');
         } else {
             /** @var $btn Link */
