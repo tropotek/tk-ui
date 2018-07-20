@@ -288,7 +288,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     {
         $html = <<<HTML
 <ol class="breadcrumb" var="breadcrumb">
-  <li repeat="li" var="li"><a href="#" var="url"></a></li>
+  <li class="breadcrumb-item" repeat="li" var="li"><a href="#" var="url"></a></li>
 </ol>
 HTML;
 
