@@ -58,10 +58,9 @@ class CrumbsHandler implements Subscriber
         $controller = $event->get('controller');
         /** @var \Tk\Controller\Page $page */
         $page = $controller->getPage();
-
         if ($page instanceof \Tk\Controller\Page) {
             $crumbs = $config->getCrumbs();
-            if (!$crumbs) return;
+            if (!$crumbs || !$crumbs->isVisible()) return;
 
             $template = $page->getTemplate();
             $backUrl = $crumbs->getBackUrl();
@@ -76,9 +75,12 @@ jQuery(function($) {
 });
 JS;
             $template->appendjs($js);
-            if ($template->keyExists('var', 'breadcrumb')) {
-                $template->replaceTemplate('breadcrumb', $crumbs->show());
-                $template->setChoice('breadcrumb');
+            $var = 'breadcrumb';
+            if ($config->has('template.var.page.breadcrumbs'))
+                $var = $config->get('template.var.page.breadcrumbs');
+            if ($template->keyExists('var', $var)) {
+                $template->replaceTemplate($var, $crumbs->show());
+                $template->setChoice($var);
             }
         }
     }

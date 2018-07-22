@@ -50,6 +50,11 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      */
     protected $session = null;
 
+    /**
+     * @var boolean
+     */
+    protected $visible = true;
+
 
     /**
      * @param \Tk\Session $session
@@ -152,6 +157,22 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     public function getSession()
     {
         return $this->session;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @param bool $visible
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
     }
 
     /**
