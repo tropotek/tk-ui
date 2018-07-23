@@ -17,6 +17,11 @@ class CrumbsHandler implements Subscriber
     protected $renderEnabled = true;
 
     /**
+     * @var null|\Tk\Controller\Iface
+     */
+    protected $controller = null;
+
+    /**
      * @param bool $renderEnabled Set this to false to create your own onShow() Handlers
      */
     public function __construct($renderEnabled = true)
@@ -35,13 +40,13 @@ class CrumbsHandler implements Subscriber
         if (!$crumbs) throw new \Tk\Exception('Error creating crumb instance.');
 
         /** @var \Tk\Controller\Iface $controller */
-        $controller = $event->getController();
-        if ($controller instanceof \Tk\Controller\Iface) {
+        $this->controller = $event->getController();
+        if ($this->controller instanceof \Tk\Controller\Iface) {
             // ignore adding crumbs if param in request URL
-            if ($controller->getRequest()->has(\Tk\Crumbs::CRUMB_IGNORE)) {
+            if ($this->controller->getRequest()->has(\Tk\Crumbs::CRUMB_IGNORE)) {
                 return;
             }
-            $title = $controller->getPageTitle();
+            $title = $this->controller->getPageTitle();
             $crumbs->trimByTitle($title);
             $crumbs->addCrumb($title, \Tk\Uri::create());
         }
