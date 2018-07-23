@@ -49,7 +49,7 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
             $template->insertText('text', $this->title);
         if ($this->icon)
             $template->addCss('icon', $this->icon);
-        if ($this->isEnabled())
+        if ($this->isEnabled() && $this->isVisible())
             $template->setChoice('panel');
         return $template;
     }
