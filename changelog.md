@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.16 [2018-07-30]:
+-------------------------------
+  - Added new cube template and updated action panel
+
+
 Ver 2.0.14 [2018-07-24]:
 -------------------------------
   - Upgraded the site to further use the new base and uni libs
