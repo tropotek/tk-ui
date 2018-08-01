@@ -99,7 +99,7 @@ class ButtonDropdown extends ButtonCollection
         }
         if (count($this->linkList) == 1) {
             /** @var \Tk\Ui\Link $link */
-            $link = current($this->linkList);
+            $link = current(reset($this->linkList));
             $template->setAttr('btn', 'href', $link->getUrl());
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
@@ -112,7 +112,7 @@ class ButtonDropdown extends ButtonCollection
                 //$tpl = $link->show();
                 //$template->appendHtml('dropdown-menu', '<li>' . $tpl->toString() . '</li>');
                 $item = $template->getRepeat('item');
-                $item->insertTemplate('item', $link->show());
+                $item->appendTemplate('item', $link->show());
                 $item->appendRepeat();
             }
             $template->addCss('dropdown', $this->getCssList());
