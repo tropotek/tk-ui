@@ -99,7 +99,7 @@ class ButtonDropdown extends ButtonCollection
         }
         if (count($this->linkList) == 1) {
             /** @var \Tk\Ui\Link $link */
-            $link = current(reset($this->linkList));
+            $link = $this->linkList[0];
             $template->setAttr('btn', 'href', $link->getUrl());
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
