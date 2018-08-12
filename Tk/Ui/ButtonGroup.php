@@ -19,11 +19,14 @@ class ButtonGroup extends ButtonCollection
      * Return an object that your framework can interpret and display.
      *
      * @return null|Template|Renderer
-     * @throws \Dom\Exception
      */
     public function show()
     {
         $template = parent::show();
+        if (!$this->isVisible()) {
+            return $template;
+        }
+
         /** @var $btn Button */
         foreach($this->linkList as $btn) {
             $tpl = $btn->show();

@@ -17,7 +17,7 @@ class Button extends Link
     /**
      * @param string $text
      * @param null|string|\Tk\Uri $url
-     * @param string $icon
+     * @param string|Icon $icon
      * @return static
      */
     public static function create($text, $url = null, $icon = '')
@@ -25,7 +25,7 @@ class Button extends Link
         $obj = new static();
         $obj->text = $text;
         $obj->url = $url;
-        $obj->icon = $icon;
+        $obj->setIcon($icon);
         $obj->addCss('btn btn-default');
         return $obj;
     }

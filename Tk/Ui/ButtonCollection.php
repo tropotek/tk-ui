@@ -45,7 +45,6 @@ class ButtonCollection extends Element
      * @return Element
      */
     public function add($button) {
-        $button->set('group', $this);
         $this->linkList->set($button->getId(), $button);
         return $button;
     }
@@ -184,6 +183,9 @@ class ButtonCollection extends Element
     public function show()
     {
         $template = $this->getTemplate();
+        if (!$this->isVisible()) {
+            return $template;
+        }
 
         /** @var Link $srcBtn */
         foreach ($this->linkList as $srcBtn) {

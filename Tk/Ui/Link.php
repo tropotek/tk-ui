@@ -26,17 +26,16 @@ class Link extends Element
     protected $url = null;
 
     /**
-     * icon css. EG: 'fa fa-user'
-     * @var string
+     * @var Icon
      */
-    protected $icon = '';
+    protected $icon = null;
 
 
 
     /**
      * @param string $text
      * @param null|string|\Tk\Uri $url
-     * @param string $icon
+     * @param string|Icon $icon
      * @return static
      */
     public static function create($text, $url = null, $icon = '')
@@ -44,7 +43,7 @@ class Link extends Element
         $obj = new static();
         $obj->text = $text;
         $obj->url = $url;
-        $obj->icon = $icon;
+        $obj->setIcon($icon);
         return $obj;
     }
 
@@ -54,22 +53,21 @@ class Link extends Element
     public function show()
     {
         $template = parent::show();
-
-        if (!$this->isVisible()) return $template;
-        $template->setChoice('link');
+        if (!$this->isVisible()) {
+            return $template;
+        }
 
         $space = '';
         if ($this->getIcon()) $space = ' ';
-
-        if ($this->getText()) {
-            $template->insertText('text', $space . $this->getText());
-        }
         if ($this->getUrl()) {
             $template->setAttr('link', 'href', $this->getUrl());
         }
         if ($this->getIcon()) {
-            $template->addCss('ico', $this->getIcon());
-            $template->setChoice('ico');
+            $template->appendTemplate('link', $this->getIcon()->show());
+        }
+
+        if ($this->getText()) {
+            $template->appendText('link', $space . $this->getText());
         }
 
         $template->addCss('link', $this->getCssList());
@@ -84,7 +82,7 @@ class Link extends Element
     public function __makeTemplate()
     {
         $html = <<<HTML
-<a href="#" var="link" choice="link"><i var="ico" choice="ico"></i><span var="text"></span></a>
+<a href="#" var="link"></a>
 HTML;
         return \Dom\Loader::load($html);
     }
@@ -128,7 +126,7 @@ HTML;
     }
 
     /**
-     * @return string
+     * @return Icon
      */
     public function getIcon()
     {
@@ -136,12 +134,12 @@ HTML;
     }
 
     /**
-     * @param string $icon
+     * @param string|Icon $icon
      * @return $this
      */
     public function setIcon($icon)
     {
-        $this->icon = $icon;
+        $this->icon = Icon::create($icon);
         return $this;
     }
 

@@ -13,7 +13,6 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
 {
     use \Tk\Dom\AttributesTrait;
     use \Tk\Dom\CssTrait;
-    use \Tk\CollectionTrait;
 
     /**
      * @var int
@@ -56,7 +55,7 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
         if ($this->hasOnShow()) {
             call_user_func_array($this->getOnShow(), array($this));
         }
-        if (!$this->isVisible()) return $template;
+        if (!$this->isVisible()) return $template->clear($template->getRootElement());
 
         return $template;
     }
