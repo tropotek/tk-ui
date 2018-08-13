@@ -195,6 +195,9 @@ class ButtonCollection extends Element
             $template->appendTemplate('body', $btnTemplate);
         }
 
+        $template->addCss('body', $this->getCssList());
+        $template->setAttr('body', $this->getAttrList());
+
         return $template;
     }
 

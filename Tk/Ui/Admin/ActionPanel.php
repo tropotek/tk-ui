@@ -45,12 +45,16 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
     public function show()
     {
         $template = parent::show();
+
+
         if ($this->title)
             $template->insertText('text', $this->title);
         if ($this->icon)
             $template->addCss('icon', $this->icon);
-        if ($this->isEnabled() && $this->isVisible())
-            $template->setChoice('panel');
+
+        if (!$this->isEnabled() || !$this->isVisible())
+            $template->hide('panel');
+
         return $template;
     }
 
@@ -114,7 +118,7 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
     public function __makeTemplate()
     {
         $html = <<<HTML
-<div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel" choice="panel">
+<div class="panel panel-default panel-shortcut tk-ui-action-panel" var="panel">
   <div class="panel-heading" var="heading">
     <h4 class="panel-title" var="title"><span><i var="icon"></i> <span var="text"></span></span></h4>
   </div>
