@@ -3,7 +3,7 @@ namespace Tk\Ui;
 
 use Dom\Renderer\Renderer;
 use Dom\Template;
-
+use Tk\Ui\Icon;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -27,7 +27,7 @@ class ButtonDropdown extends ButtonCollection
 
     /**
      * @param $text
-     * @param string $icon
+     * @param string|Icon $icon
      * @param array|Link[] $links
      * @return static
      */
@@ -101,27 +101,28 @@ class ButtonDropdown extends ButtonCollection
         } else {
             $template->hide('ico');
         }
+
+
         if (count($this->linkList) == 1) {
             /** @var \Tk\Ui\Link $link */
             $link = $this->linkList[0];
             $template->setAttr('btn', 'href', $link->getUrl());
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
-            $template->removeClass('btn-group', 'btn-group');
-            $template->setAttr('btn-group', 'style', 'display: inline-block;');
             $template->hide('dropdown');
         } else {
             /** @var $btn Link */
             foreach($this->linkList as $link) {
-                //$tpl = $link->show();
-                //$template->appendHtml('dropdown-menu', '<li>' . $tpl->toString() . '</li>');
                 $item = $template->getRepeat('item');
                 $item->appendTemplate('item', $link->show());
                 $item->appendRepeat();
             }
-            $template->addCss('dropdown', $this->getCssList());
-            $template->setAttr('dropdown', $this->getAttrList());
-            $template->hide('btn');
+            $this->setAttr('id', 'dropdown-'.$this->getId());
+            $template->setAttr('dropdown-menu', 'aria-labelledby', 'dropdown-'.$this->getId());
+
+            $template->addCss('dropdown-toggle', $this->getCssList());
+            $template->setAttr('dropdown-toggle', $this->getAttrList());
+            $template->hide('btn-group');
         }
 
         return $template;
@@ -134,14 +135,18 @@ class ButtonDropdown extends ButtonCollection
     public function __makeTemplate()
     {
         $html = <<<HTML
-<div class="btn-group" var="btn-group">
-  <a href="#" class="btn btn-default" var="btn"><i var="ico"></i><span var="text">Action</span></a>
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" var="dropdown">
-    <i var="ico" choice="ico"></i><span var="text">Action</span> <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" var="dropdown-menu" choice="dropdown">
-    <li repeat="item" var="item"></li>
-  </ul>
+<div style="display: inline-block;">
+  <div class="btn-group" var="btn-group">
+    <a href="#" class="btn btn-default" var="btn"><i var="ico"></i><span var="text">Action</span></a>
+  </div>
+  <div class="dropdown" var="dropdown">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" var="dropdown-toggle">
+      <i var="ico" choice="ico"></i><span var="text">Action</span> <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" var="dropdown-menu">
+      <li repeat="item" var="item"></li>
+    </ul>
+  </div>
 </div>
 HTML;
         return \Dom\Loader::load($html);
