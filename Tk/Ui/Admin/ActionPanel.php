@@ -52,8 +52,9 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
         if ($this->icon)
             $template->addCss('icon', $this->icon);
 
-        if (!$this->isEnabled() || !$this->isVisible())
+        if (!$this->isEnabled() || !$this->isVisible()) {
             $template->hide('panel');
+        }
 
         return $template;
     }

@@ -3,32 +3,20 @@ namespace Tk\Ui\Menu;
 
 use Tk\Uri;
 use Tk\Ui\Icon;
+use Tk\Ui\Link;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2018 Michael Mifsud
  */
-class Item
+class Item extends \Tk\Ui\Element
 {
-    use \Tk\Dom\AttributesTrait;
-    use \Tk\Dom\CssTrait;
 
     /**
-     * This is the Item text not the attribute
-     * @var string
+     * @var Link
      */
-    protected $title = '';
-
-    /**
-     * @var Uri
-     */
-    protected $url = null;
-    
-    /**
-     * @var Icon
-     */
-    protected $icon = '';
+    protected $link = null;
 
     
     /**
@@ -49,65 +37,46 @@ class Item
 
 
     /**
-     * @param string $title
-     * @param Uri|string $url
-     * @param string $icon
+     * @param Link $link
      */
-    protected function __construct($title = '', $url = null, $icon = '')
+    public function __construct($link = null)
     {
-        $this->title = $title;
-        $this->url = $url;
-        $this->icon = $icon;
+        parent::__construct();
+        if ($link)
+            $this->setLink($link);
     }
 
     /**
-     * @param string $title
-     * @param Uri|string $url
+     * @param string $text
+     * @param string|Uri $url
      * @param string|Icon $icon
-     * @return Item
+     * @return static
      */
-    static function create($title = '', $url = null, $icon = null)
+    static function create($text = '', $url = null, $icon = null)
     {
-        $obj = new static($title, $url, $icon);
+        $link = null;
+        if ($text || $url || $icon)
+            $link = Link::create($text, $url, $icon);
+        $obj = new static($link);
         return $obj;
     }
 
     /**
-     * Set the item title text
-     *
-     * NOTE: This is not the title attribute, it is the item text
-     *
-     * @param string $str
-     * @return Item
+     * @return null|Link
      */
-    function setTitle($str)
+    public function getLink()
     {
-        $this->title = $str;
+        return $this->link;
+    }
+
+    /**
+     * @param null|Link $link
+     * @return $this
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return Uri
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @return Icon
-     */
-    public function getIcon()
-    {
-        return $this->icon;
     }
 
     /**
@@ -262,7 +231,7 @@ class Item
     }
 
     /**
-     * find the first menu Item to contain the matching href
+     * Find the first menu Item to contain the matching href
      * Set $full to false to only search for the url path and not include the query string portion.
      *
      * @param string $href
@@ -272,7 +241,7 @@ class Item
     public function findByHref($href, $full = true)
     {
         $cmp1 = Uri::create($href);
-        $cmp2 = Uri::create( $this->getUrl());
+        $cmp2 = Uri::create( $this->getLink());
         if (!$full) {
             $cmp1->reset();
             $cmp2->reset();
@@ -291,16 +260,16 @@ class Item
     /**
      * Get a menu item by its text.
      *
-     * @param string $title
+     * @param string $text
      * @return Item|null
      */
-    public function findByTitle($title)
+    public function findByText($text)
     {
-        if ($this->getTitle() == $title) {
+        if ($this->getLink()->getText() == $text) {
             return $this;
         }
         foreach($this->getChildren() as $item) {
-            $found = $item->findByTitle($title);
+            $found = $item->findByText($text);
             if ($found) {
                 return $found;
             }
@@ -321,7 +290,7 @@ class Item
     }
 
     /**
-     * reset the children array
+     * Reset the children array
      *
      * @return Item
      */
@@ -342,7 +311,7 @@ class Item
     }
 
     /**
-     * get the size of the crumbs array
+     * Get the size of the crumbs array
      *
      * @param bool $deep
      * @return int
@@ -375,16 +344,13 @@ class Item
     protected function iterateStr($list, $n = 0)
     {
         $str = '';
-
         foreach ($list as $item) {
             $s = implode('', array_fill(0, $n*2, ' ')) . ' - ' . $item->getTitle() . "\n";
             $str .= $s;
-vd($item->getTitle(), $n);
             if ($item->hasChildren()) {
                 $str .= $this->iterateStr($item->getChildren(), $n+1);
             }
         }
-
         return $str;
     }
 }

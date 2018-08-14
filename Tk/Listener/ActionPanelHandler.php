@@ -31,8 +31,10 @@ class ActionPanelHandler implements Subscriber
 
         /** @var \Tk\Ui\Admin\ActionPanel $actionPanel */
         $actionPanel = $controller->getActionPanel();
-        if ($actionPanel->isEnabled() && $actionPanel->isVisible())
-            $pageTemplate->prependTemplate($contentVar, $actionPanel->show());
+        if ($actionPanel->isEnabled() && $actionPanel->isVisible()) {
+            $tpl = $actionPanel->show();
+            $pageTemplate->prependTemplate($contentVar, $tpl);
+        }
 
     }
 

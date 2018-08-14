@@ -38,7 +38,6 @@ class Icon extends Element
             return $template;
         }
 
-
         $template->addCss('icon', $this->getCssList());
         $template->setAttr('icon', $this->getAttrList());
 

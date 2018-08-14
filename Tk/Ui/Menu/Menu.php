@@ -10,14 +10,34 @@ namespace Tk\Ui\Menu;
 class Menu extends Item
 {
 
+
     /**
-     * @var Renderer
+     * @var array|Menu[]
+     */
+    protected static $instance = array();
+
+
+    /**
+     * @var ListRenderer
      */
     protected $renderer = null;
 
 
+
     /**
-     * @return Renderer
+     * @param string $name The name of the menu to retrieve
+     * @return static
+     */
+    static function getInstance($name = null)
+    {
+        if (!isset(self::$instance[$name])) {
+            self::$instance[$name] = static::create($name);
+        }
+        return self::$instance[$name];
+    }
+
+    /**
+     * @return ListRenderer
      */
     public function getRenderer()
     {
@@ -27,11 +47,13 @@ class Menu extends Item
     /**
      * Set the renderer object
      *
-     * @param Renderer $renderer
+     * @param ListRenderer $renderer
+     * @return Menu
      */
-    public function setRenderer(Renderer $renderer)
+    public function setRenderer(ListRenderer $renderer)
     {
         $this->renderer = $renderer;
+        return $this;
     }
 
 }

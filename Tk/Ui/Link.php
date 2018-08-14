@@ -30,6 +30,11 @@ class Link extends Element
      */
     protected $icon = null;
 
+    /**
+     * @var Icon
+     */
+    protected $rightIcon = null;
+
 
 
     /**
@@ -38,12 +43,14 @@ class Link extends Element
      * @param string|Icon $icon
      * @return static
      */
-    public static function create($text, $url = null, $icon = '')
+    public static function create($text, $url = null, $icon = null)
     {
         $obj = new static();
-        $obj->text = $text;
-        $obj->url = $url;
-        $obj->setIcon($icon);
+        $obj->setText($text);
+        if ($url)
+            $obj->setUrl($url);
+        if ($icon)
+            $obj->setIcon($icon);
         return $obj;
     }
 
@@ -65,9 +72,11 @@ class Link extends Element
         if ($this->getIcon()) {
             $template->appendTemplate('link', $this->getIcon()->show());
         }
-
         if ($this->getText()) {
-            $template->appendText('link', $space . $this->getText());
+            $template->appendHtml('link', $space . '<span>' . $this->getText() . '</span>');
+        }
+        if ($this->getRightIcon()) {
+            $template->appendTemplate('link', $this->getRightIcon()->show());
         }
 
         $template->addCss('link', $this->getCssList());
@@ -140,6 +149,24 @@ HTML;
     public function setIcon($icon)
     {
         $this->icon = Icon::create($icon);
+        return $this;
+    }
+
+    /**
+     * @return Icon
+     */
+    public function getRightIcon()
+    {
+        return $this->rightIcon;
+    }
+
+    /**
+     * @param Icon $rightIcon
+     * @return $this
+     */
+    public function setRightIcon($rightIcon)
+    {
+        $this->rightIcon = $rightIcon;
         return $this;
     }
 
