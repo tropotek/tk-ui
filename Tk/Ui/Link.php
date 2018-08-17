@@ -36,6 +36,22 @@ class Link extends Element
     protected $rightIcon = null;
 
 
+    /**
+     * @param string $text
+     * @param null|string|\Tk\Uri $url
+     * @param string|Icon $icon
+     */
+    public function __construct($text, $url = null, $icon = null)
+    {
+        parent::__construct();
+        $this->setText($text);
+        if ($url)
+            $this->setUrl($url);
+        if ($icon)
+            $this->setIcon($icon);
+        $this->setAttr('title', $text);
+    }
+
 
     /**
      * @param string $text
@@ -45,13 +61,21 @@ class Link extends Element
      */
     public static function create($text, $url = null, $icon = null)
     {
-        $obj = new static();
-        $obj->setText($text);
-        if ($url)
-            $obj->setUrl($url);
-        if ($icon)
-            $obj->setIcon($icon);
-        $obj->setAttr('title', $text);
+        $obj = new static($text, $url, $icon);
+        return $obj;
+    }
+
+    /**
+     * @param $text
+     * @param null $url
+     * @param string $icon
+     * @return Link
+     * @note this is a helper class to remove the Z
+     */
+    public static function createBtn($text, $url = null, $icon = '')
+    {
+        $obj = self::create($text, $url, $icon);
+        $obj->addCss('btn btn-default');
         return $obj;
     }
 

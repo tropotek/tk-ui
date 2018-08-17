@@ -61,16 +61,6 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
     }
 
     /**
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        $html = <<<HTML
-HTML;
-        return \Dom\Loader::load($html);
-    }
-
-    /**
      * @return int
      */
     public function getId()

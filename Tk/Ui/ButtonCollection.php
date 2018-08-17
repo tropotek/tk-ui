@@ -2,7 +2,7 @@
 namespace Tk\Ui;
 
 /**
- * TODO: We should rename this to a `LinkCollection` object
+ * TODO: We should rename this to a `ElementCollection` object
  *
  *
  * @author Michael Mifsud <info@tropotek.com>
@@ -13,9 +13,9 @@ class ButtonCollection extends Element
 {
 
     /**
-     * @var \Tk\Collection|Link[]
+     * @var array|Element[]
      */
-    protected $linkList = null;
+    protected $linkList = array();
 
 
     /**
@@ -24,7 +24,6 @@ class ButtonCollection extends Element
     public function __construct()
     {
         parent::__construct();
-        $this->linkList = new \Tk\Collection();
     }
 
     /**
@@ -35,198 +34,87 @@ class ButtonCollection extends Element
     {
         $obj = new static();
         foreach ($buttons as $b) {
-            $obj->add($b);
+            $obj->append($b);
         }
         return $obj;
     }
 
+    /**
+     * @param Element $button
+     * @param null|Element $refButton
+     * @return mixed
+     */
+    public function append($button, $refButton = null)
+    {
+        if (is_string($refButton)) {
+            $refButton = $this->find($refButton);
+        }
+        if (!$refButton) {
+            $this->linkList[] = $button;
+        } else {
+            $newArr = array();
+            foreach ($this->linkList as $b) {
+                $newArr[] = $b;
+                if ($b === $refButton) $newArr[] = $button;
+            }
+            $this->linkList = $newArr;
+        }
+        return $button;
+    }
 
     /**
-     * @param int $id
-     * @return null|Element
+     * @param Element $button
+     * @param null|Element $refButton
+     * @return mixed
      */
-    public function find($id)
+    public function prepend($button, $refButton = null)
     {
-        return $this->linkList->get($id);
+        if (is_string($refButton)) {
+            $refButton = $this->find($refButton);
+        }
+        if (!$refButton) {
+            $this->linkList = array_merge(array($button), $this->linkList);
+        } else {
+            $newArr = array();
+            foreach ($this->linkList as $b) {
+                if ($b === $refButton) $newArr[] = $button;
+                $newArr[] = $b;
+            }
+            $this->linkList = $newArr;
+        }
+        return $button;
+    }
+
+    /**
+     * @param string|Element $button
+     * @return null|Element Return null if no link removed
+     */
+    public function remove($button)
+    {
+        if (is_string($button)) {
+            $button = $this->find($button);
+        }
+        $newArr = array();
+        foreach ($this->linkList as $b) {
+            if ($b !== $button) $newArr[] = $b;
+        }
+        $this->linkList = $newArr;
+        return $button;
     }
 
     /**
      * @param string $title
      * @return null|Element
      */
-    public function findByTitle($title)
+    public function find($title)
     {
         /** @var Element $button */
         foreach ($this->linkList as $button) {
             if ($button->hasAttr('title') && $button->getAttr('title') == $title)
-            //if (method_exists($button, 'getText') && $button->getText() == $title)
                 return $button;
         }
         return null;
     }
-
-    /**
-     * @param Button $button
-     * @param null|Button $refButton
-     * @return mixed
-     */
-    public function appendButton($button, $refButton = null)
-    {
-        if (is_string($refButton)) {
-            $refButton = $this->findByTitle($refButton);
-        }
-        if (!$refButton) {
-            $this->linkList->set($button->getAttr('title'), $button);
-        } else {
-            $newArr = array();
-            foreach ($this->linkList as $b) {
-                $newArr[$b->getAttr('title')] = $b;
-                if ($b === $refButton) $newArr[$button->getAttr('title')] = $button;
-            }
-            $this->linkList->clear()->replace($newArr);
-        }
-        return $button;
-    }
-
-    /**
-     * @param Button $button
-     * @param null|Button $refButton
-     * @return mixed
-     */
-    public function prependButton($button, $refButton = null)
-    {
-        if (is_string($refButton)) {
-            $refButton = $this->findByTitle($refButton);
-        }
-        if (!$refButton) {
-            $all = $this->linkList->all();
-            $this->linkList->clear()->replace(array_merge(array($button), $all));
-        } else {
-            $newArr = array();
-            foreach ($this->linkList as $b) {
-                if ($b === $refButton) $newArr[$button->getAttr('title')] = $button;
-                $newArr[$b->getAttr('title')] = $b;
-            }
-            $this->linkList->clear()->replace($newArr);
-        }
-        return $button;
-    }
-
-
-    /**
-     * @param Element $srcButton
-     * @param Element $button
-     * @return Element
-     */
-    public function addAfter($srcButton, $button)
-    {
-        $newArr = array();
-        if (!count($this->linkList)) {
-            $this->add($button);
-            return $button;
-        }
-        foreach ($this->linkList as $k => $v) {
-            $newArr[$k] = $v;
-            if ($k == $srcButton->getId()) {
-                $newArr[$button->getId()] =  $button;
-            }
-        }
-        $this->linkList->clear()->replace($newArr);
-        return $button;
-    }
-
-    /**
-     * @param Element $button
-     * @return Element
-     */
-    public function add($button) {
-        $this->linkList->set($button->getId(), $button);
-        return $button;
-    }
-
-    /**
-     * @param Element $srcButton
-     * @param Element $button
-     * @return Element
-     * @deprecated
-     */
-    public function addBefore($srcButton, $button)
-    {
-        $newArr = array();
-        if (!count($this->linkList)) {
-            $this->add($button);
-            return $button;
-        }
-        foreach ($this->linkList as $k => $v) {
-            if ($k == $srcButton->getId()) {
-                $newArr[$button->getId()] =  $button;
-            }
-            $newArr[$k] = $v;
-        }
-        $this->linkList->clear()->replace($newArr);
-        return $button;
-    }
-
-    /**
-     * @param int|Element $id
-     * @return null|Element Return null if no link removed
-     */
-    public function remove($id)
-    {
-        if ($id instanceof Link) $id = $id->getId();
-
-        if (!$this->linkList->has($id)) return null;
-        $button = $this->linkList->get($id);
-        $this->linkList->remove($id);
-        return $button;
-    }
-
-    /**
-     * @param Element $button
-     * @return Element
-     * @deprecated
-     */
-    public function addButton($button) { return $this->add($button); }
-
-    /**
-     * @param Element $srcButton
-     * @param Element $button
-     * @return Element
-     * @deprecated
-     */
-    public function addButtonBefore($srcButton, $button) { return $this->addBefore($srcButton, $button); }
-
-    /**
-     * @param Element $srcButton
-     * @param Element $button
-     * @return Element
-     * @deprecated
-     */
-    public function addButtonAfter($srcButton, $button) { return $this->addAfter($srcButton, $button); }
-
-    /**
-     * @param $id
-     * @return null|Element
-     * @deprecated
-     */
-    public function findButton($id) { return $this->find($id); }
-
-    /**
-     * @param $title
-     * @return null|Element
-     * @deprecated
-     */
-    public function findButtonByTitle($title) { return $this->findByTitle($title); }
-
-    /**
-     * @param $id
-     * @return null|Element
-     * @deprecated
-     */
-    public function removeButton($id) { return $this->remove($id); }
-
-
-
 
     /**
      * @return \Dom\Template
@@ -238,7 +126,7 @@ class ButtonCollection extends Element
             return $template;
         }
 
-        /** @var Link $srcBtn */
+        /** @var Element $srcBtn */
         foreach ($this->linkList as $srcBtn) {
             $btn = clone $srcBtn;
             $btnTemplate = $btn->show();
@@ -264,5 +152,85 @@ class ButtonCollection extends Element
 HTML;
         return \Dom\Loader::load($html);
     }
+
+
+
+
+
+
+    /**
+     * @param Element $button
+     * @return Element
+     * @deprecated Use append($button)
+     * @remove 2.4.0
+     */
+    public function add($button) { return $this->append($button); }
+
+    /**
+     * @param Element $button
+     * @return Element
+     * @deprecated
+     */
+    public function addButton($button) { return $this->add($button); }
+
+    /**
+     * @param Element $srcButton
+     * @param Element $button
+     * @return Element
+     * @deprecated Use append($button, $refButton)
+     * @remove 2.4.0
+     */
+    public function addAfter($srcButton, $button) { return $this->append($button, $srcButton); }
+
+    /**
+     * @param Element $srcButton
+     * @param Element $button
+     * @return Element
+     * @deprecated Use prepend($button, $refButton)
+     * @remove 2.4.0
+     */
+    public function addBefore($srcButton, $button) { return $this->prepend($button, $srcButton); }
+
+    /**
+     * @param Element $srcButton
+     * @param Element $button
+     * @return Element
+     * @deprecated Use prepend($button, $refButton)
+     * @remove 2.4.0
+     */
+    public function addButtonBefore($srcButton, $button) { return $this->addBefore($srcButton, $button); }
+
+    /**
+     * @param Element $srcButton
+     * @param Element $button
+     * @return Element
+     * @deprecated Use append($button, $refButton)
+     * @remove 2.4.0
+     */
+    public function addButtonAfter($srcButton, $button) { return $this->addAfter($srcButton, $button); }
+
+    /**
+     * @param $id
+     * @return null|Element
+     * @deprecated Use find($title)
+     * @remove 2.4.0
+     */
+    public function findButton($id) { return $this->find($id); }
+
+    /**
+     * @param $title
+     * @return null|Element
+     * @deprecated Use find($title)
+     * @remove 2.4.0
+     */
+    public function findButtonByTitle($title) { return $this->find($title); }
+
+    /**
+     * @param $id
+     * @return null|Element
+     * @deprecated Use remove($button)
+     * @remove 2.4.0
+     */
+    public function removeButton($id) { return $this->remove($id); }
     
 }

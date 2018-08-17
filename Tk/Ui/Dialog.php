@@ -7,6 +7,15 @@ namespace Tk\Ui;
  * This class uses the bootstrap dialog box model
  * @link http://getbootstrap.com/javascript/#modals
  *
+ * To add a close button to the footer:
+ *
+ *    $dialog->getButtonList()->append(\Tk\Ui\Button::createButton('Close')->setAttr('data-dismiss', 'modal'));
+ *
+ * Launch Button:
+ *
+ *    <a href="#" data-toggle="modal" data-target="#{id}"><i class="fa fa-info-circle"></i> {title}</a>
+ *
+ *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -21,28 +30,47 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     /**
      * @var string
      */
-    protected $title = '';
+    protected $id = '';
 
     /**
      * @var string
      */
+    protected $title = '';
+
+    /**
+     * @var string|\Dom\Template|\DOMDocument
+     */
     protected $content = '';
 
     /**
-     * @var array|Button[]
+     * @var \Tk\Ui\ButtonCollection
      */
-    protected $buttonList = array();
+    protected $buttonList = null;
 
 
     /**
      * DialogBox constructor.
-     * @param $title
-     * @param string $content
+     * @param string $dialogId
+     * @param string $title
      */
-    public function __construct($title, $content = '')
+    public function __construct($dialogId, $title = '')
     {
+        $this->id = $dialogId;
+        if (!$title)
+            $title = ucwords(preg_replace('/[A-Z_-]/', ' $0', $title));
         $this->setTitle($title);
-        $this->setContent($content);
+        $this->setButtonList(\Tk\Ui\ButtonCollection::create());
+    }
+
+    /**
+     * @param string $dialogId
+     * @param string $title
+     * @return static
+     */
+    public static function create($dialogId, $title = '')
+    {
+        $obj = new static($dialogId, $title);
+        return $obj;
     }
 
     /**
@@ -50,20 +78,29 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      */
     public function getId()
     {
-        return 'fid-' . preg_replace('/[^a-z0-9]/i', '_', $this->title);
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     /**
      * @param string $title
      * @return $this
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
         return $this;
     }
 
     /**
-     * @param string $html
+     * @param string|\Dom\Template|\DOMDocument $html
      * @return $this
      */
     public function setContent($html) {
@@ -72,39 +109,26 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     }
 
     /**
-     * @param Button $button
-     * @param null|Button $refButton
-     * @return $this
+     * @return ButtonCollection
      */
-    public function appendButton($button, $refButton = null)
+    public function getButtonList()
     {
-        if (strtolower($name) == 'close' || strtolower($name) == 'cancel') {
-            $attributes['data-dismiss'] = 'modal';
-        }
-        $attributes['name'] = $name;
-        $attributes['id'] = $this->getId() . '-' . preg_replace('/[^a-z0-9]/i', '_', $name);
+        return $this->buttonList;
+    }
 
-        $this->buttonList[] = array(
-            'name' => $name,
-            'attributes' => $attributes,
-            'icon' => $icon
-        );
+    /**
+     * @param ButtonCollection $buttonList
+     * @return static
+     */
+    public function setButtonList(ButtonCollection $buttonList)
+    {
+        $this->buttonList = $buttonList;
         return $this;
     }
 
 
-    public function findButton($button)
-    {
-        
-    }
-
-
-
-
-
     /**
      * @return \Dom\Template
-     * @throws \Exception
      */
     public function show()
     {
@@ -113,30 +137,16 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         $this->setAttr('id', $this->getId());
         $this->setAttr('aria-labelledby', $this->getId().'-Label');
 
-
-        $template->insertText('title', $this->title);
         if ($this->content instanceof \Dom\Template) {
-            $template->insertTemplate('body', $this->content);
+            $template->insertTemplate('content', $this->content);
         } else if ($this->content instanceof \DOMDocument) {
-            $template->insertHtml('body', $this->content);
+            $template->insertHtml('content', $this->content);
         } else {
-            $template->insertHtml('body', $this->content);
+            $template->insertHtml('content', $this->content);
         }
 
-
-        foreach ($this->buttonList as $btn) {
-            $row = $template->getRepeat('btn');
-            $row->insertText('name', $btn['name']);
-            if ($btn['icon']) {
-                $row->setChoice('icon');
-                $row->addCss('icon', $btn['icon']);
-            }
-            foreach ($btn['attributes'] as $k => $v) {
-                $row->setAttr('btn', strip_tags($k), $v);
-            }
-            $row->appendRepeat();
-        }
-
+        $template->appendTemplate('footer', $this->buttonList->show());
+        $template->insertText('title', $this->getTitle());
         $template->setAttr('title', 'id', $this->getId().'-Label');
 
         // Add attributes
@@ -155,12 +165,12 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="_exampleModalLabel" var="dialog">
+<div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="_exampleModalLabel" var="title">New message</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body" var="content"></div>
       <div class="modal-footer" var="footer"></div>
