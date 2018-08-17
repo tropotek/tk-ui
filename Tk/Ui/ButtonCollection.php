@@ -40,36 +40,78 @@ class ButtonCollection extends Element
         return $obj;
     }
 
+
     /**
-     * @param Element $button
-     * @return Element
+     * @param int $id
+     * @return null|Element
      */
-    public function add($button) {
-        $this->linkList->set($button->getId(), $button);
+    public function find($id)
+    {
+        return $this->linkList->get($id);
+    }
+
+    /**
+     * @param string $title
+     * @return null|Element
+     */
+    public function findByTitle($title)
+    {
+        /** @var Element $button */
+        foreach ($this->linkList as $button) {
+            if ($button->hasAttr('title') && $button->getAttr('title') == $title)
+            //if (method_exists($button, 'getText') && $button->getText() == $title)
+                return $button;
+        }
+        return null;
+    }
+
+    /**
+     * @param Button $button
+     * @param null|Button $refButton
+     * @return mixed
+     */
+    public function appendButton($button, $refButton = null)
+    {
+        if (is_string($refButton)) {
+            $refButton = $this->findByTitle($refButton);
+        }
+        if (!$refButton) {
+            $this->linkList->set($button->getAttr('title'), $button);
+        } else {
+            $newArr = array();
+            foreach ($this->linkList as $b) {
+                $newArr[$b->getAttr('title')] = $b;
+                if ($b === $refButton) $newArr[$button->getAttr('title')] = $button;
+            }
+            $this->linkList->clear()->replace($newArr);
+        }
         return $button;
     }
 
     /**
-     * @param Element $srcButton
-     * @param Element $button
-     * @return Element
+     * @param Button $button
+     * @param null|Button $refButton
+     * @return mixed
      */
-    public function addBefore($srcButton, $button)
+    public function prependButton($button, $refButton = null)
     {
-        $newArr = array();
-        if (!count($this->linkList)) {
-            $this->add($button);
-            return $button;
+        if (is_string($refButton)) {
+            $refButton = $this->findByTitle($refButton);
         }
-        foreach ($this->linkList as $k => $v) {
-            if ($k == $srcButton->getId()) {
-                $newArr[$button->getId()] =  $button;
+        if (!$refButton) {
+            $all = $this->linkList->all();
+            $this->linkList->clear()->replace(array_merge(array($button), $all));
+        } else {
+            $newArr = array();
+            foreach ($this->linkList as $b) {
+                if ($b === $refButton) $newArr[$button->getAttr('title')] = $button;
+                $newArr[$b->getAttr('title')] = $b;
             }
-            $newArr[$k] = $v;
+            $this->linkList->clear()->replace($newArr);
         }
-        $this->linkList->clear()->replace($newArr);
         return $button;
     }
+
 
     /**
      * @param Element $srcButton
@@ -94,26 +136,35 @@ class ButtonCollection extends Element
     }
 
     /**
-     * @param int $id
-     * @return null|Element
+     * @param Element $button
+     * @return Element
      */
-    public function find($id)
-    {
-        return $this->linkList->get($id);
+    public function add($button) {
+        $this->linkList->set($button->getId(), $button);
+        return $button;
     }
 
     /**
-     * @param string $title
-     * @return null|Element
+     * @param Element $srcButton
+     * @param Element $button
+     * @return Element
+     * @deprecated
      */
-    public function findByTitle($title)
+    public function addBefore($srcButton, $button)
     {
-        /** @var Element $button */
-        foreach ($this->linkList as $button) {
-            if (method_exists($button, 'getText') && $button->getText() == $title)
-                return $button;
+        $newArr = array();
+        if (!count($this->linkList)) {
+            $this->add($button);
+            return $button;
         }
-        return null;
+        foreach ($this->linkList as $k => $v) {
+            if ($k == $srcButton->getId()) {
+                $newArr[$button->getId()] =  $button;
+            }
+            $newArr[$k] = $v;
+        }
+        $this->linkList->clear()->replace($newArr);
+        return $button;
     }
 
     /**

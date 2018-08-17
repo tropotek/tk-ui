@@ -45,8 +45,6 @@ class ActionPanel extends \Tk\Ui\ButtonCollection
     public function show()
     {
         $template = parent::show();
-
-
         if ($this->title)
             $template->insertText('text', $this->title);
         if ($this->icon)

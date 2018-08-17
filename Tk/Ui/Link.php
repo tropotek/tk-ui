@@ -51,6 +51,7 @@ class Link extends Element
             $obj->setUrl($url);
         if ($icon)
             $obj->setIcon($icon);
+        $obj->setAttr('title', $text);
         return $obj;
     }
 
