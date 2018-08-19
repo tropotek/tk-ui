@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.26 [2018-08-20]:
+-------------------------------
+  - Created New \Tk\Ui\Dialog Object
+
+
 Ver 2.0.24 [2018-08-14]:
 -------------------------------
   - Added new BS4 cube theme
