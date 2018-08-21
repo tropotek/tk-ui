@@ -42,8 +42,9 @@ class Item extends \Tk\Ui\Element
     public function __construct($link = null)
     {
         parent::__construct();
-        if ($link)
+        if ($link) {
             $this->setLink($link);
+        }
     }
 
     /**
@@ -55,8 +56,9 @@ class Item extends \Tk\Ui\Element
     static function create($text = '', $url = null, $icon = null)
     {
         $link = null;
-        if ($text || $url || $icon)
+        if ($text || $url || $icon) {
             $link = Link::create($text, $url, $icon);
+        }
         $obj = new static($link);
         return $obj;
     }
@@ -103,16 +105,18 @@ class Item extends \Tk\Ui\Element
     public function prepend($item, $refItem = null)
     {
         $it = $this->initChildren($item);
+        if (is_string($refItem)) {
+            $refItem = $this->findByText($refItem);
+        }
         if (!$refItem) { // prepend to the top of the child array
             $this->setChildren(array_merge($it, $this->getChildren()));
         } else {
-            foreach ($this->getChildren() as $i => $child) {
-                if ($child === $refItem) {
-                    $p1 = array_slice($this->getChildren(), 0, $i);
-                    $p2 = array_slice($this->getChildren(), $i+1);
-                    $this->setChildren(array_merge($p1, $it, $p2));
-                }
+            $newArr = array();
+            foreach ($this->getChildren() as $i => $c) {
+                if ($c === $refItem) $newArr[] = $item;
+                $newArr[] = $c;
             }
+            $this->setChildren($newArr);
         }
         return $item;
     }
@@ -125,18 +129,20 @@ class Item extends \Tk\Ui\Element
     public function append($item, $refItem = null)
     {
         $it = $this->initChildren($item);
+        if (is_string($refItem)) {
+            $refItem = $this->findByText($refItem);
+        }
         if (!$refItem) {    // Append to the list as normal
             foreach ($it as $i) {
                 $this->children[] = $i;
             }
         } else {
-            foreach ($this->getChildren() as $i => $child) {
-                if ($child === $refItem) {
-                    $p1 = array_slice($this->getChildren(), 0, $i-1);
-                    $p2 = array_slice($this->getChildren(), $i);
-                    $this->setChildren(array_merge($p1, $it, $p2));
-                }
+            $newArr = array();
+            foreach ($this->getChildren() as $i => $c) {
+                $newArr[] = $c;
+                if ($c === $refItem) $newArr[] = $item;
             }
+            $this->setChildren($newArr);
         }
         return $item;
     }
@@ -345,7 +351,16 @@ class Item extends \Tk\Ui\Element
     {
         $str = '';
         foreach ($list as $item) {
-            $s = implode('', array_fill(0, $n*2, ' ')) . ' - ' . $item->getTitle() . "\n";
+            $s = '';
+            if ($item->getLink()) {
+                if ($item->getLink()->getText()) {
+                    $s .= $item->getLink()->getText();
+                }
+                if ($item->getLink()->getUrl()) {
+                    $s .= ' ['.$item->getLink()->getUrl()->toString().']';
+                }
+            }
+            $s = implode('', array_fill(0, $n*2, ' ')) . ' - ' . $s . "\n";
             $str .= $s;
             if ($item->hasChildren()) {
                 $str .= $this->iterateStr($item->getChildren(), $n+1);

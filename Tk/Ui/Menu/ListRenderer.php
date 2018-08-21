@@ -66,14 +66,17 @@ class ListRenderer extends RendererIface
                     }
                 }
             }
+
+            if ($item->hasChildren()) {
+                $item->addCss('submenu');
+                $ulSub = $this->iterate($item->getChildren(), $n+1);
+                //$ulSub->addCss('list', 'submenu');
+                $li->appendTemplate('item', $ulSub);
+            }
+
             $li->addCss('item', $item->getCssList());
             $li->setAttr('item', $item->getAttrList());
 
-            if ($item->hasChildren()) {
-                $ulSub = $this->iterate($item->getChildren(), $n+1);
-                $ulSub->addCss('list', 'submenu');
-                $li->appendTemplate('item', $ulSub);
-            }
             $ul->appendTemplate('list', $li);
         }
         return $ul;
