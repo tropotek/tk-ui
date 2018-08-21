@@ -14,11 +14,16 @@ class Item extends \Tk\Ui\Element
 {
 
     /**
+     * @var string
+     */
+    protected $name = '';
+
+    /**
      * @var Link
      */
     protected $link = null;
 
-    
+
     /**
      * @var array|Item[]
      */
@@ -39,28 +44,40 @@ class Item extends \Tk\Ui\Element
     /**
      * @param Link $link
      */
-    public function __construct($link = null)
+    public function __construct($name = '', $url = null, $icon = null)
     {
         parent::__construct();
-        if ($link) {
-            $this->setLink($link);
-        }
+        $this->setName($name);
+        if ($name || $url || $icon)
+            $this->setLink(Link::create($name, $url, $icon));
     }
 
     /**
-     * @param string $text
+     * @param string $name
      * @param string|Uri $url
      * @param string|Icon $icon
      * @return static
      */
-    static function create($text = '', $url = null, $icon = null)
+    static function create($name = '', $url = null, $icon = null)
     {
-        $link = null;
-        if ($text || $url || $icon) {
-            $link = Link::create($text, $url, $icon);
-        }
-        $obj = new static($link);
+        $obj = new static($name, $url, $icon);
         return $obj;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -105,18 +122,16 @@ class Item extends \Tk\Ui\Element
     public function prepend($item, $refItem = null)
     {
         $it = $this->initChildren($item);
-        if (is_string($refItem)) {
-            $refItem = $this->findByText($refItem);
-        }
         if (!$refItem) { // prepend to the top of the child array
             $this->setChildren(array_merge($it, $this->getChildren()));
         } else {
-            $newArr = array();
-            foreach ($this->getChildren() as $i => $c) {
-                if ($c === $refItem) $newArr[] = $item;
-                $newArr[] = $c;
+            foreach ($this->getChildren() as $i => $child) {
+                if ($child === $refItem) {
+                    $p1 = array_slice($this->getChildren(), 0, $i);
+                    $p2 = array_slice($this->getChildren(), $i+1);
+                    $this->setChildren(array_merge($p1, $it, $p2));
+                }
             }
-            $this->setChildren($newArr);
         }
         return $item;
     }
@@ -129,20 +144,18 @@ class Item extends \Tk\Ui\Element
     public function append($item, $refItem = null)
     {
         $it = $this->initChildren($item);
-        if (is_string($refItem)) {
-            $refItem = $this->findByText($refItem);
-        }
         if (!$refItem) {    // Append to the list as normal
             foreach ($it as $i) {
                 $this->children[] = $i;
             }
         } else {
-            $newArr = array();
-            foreach ($this->getChildren() as $i => $c) {
-                $newArr[] = $c;
-                if ($c === $refItem) $newArr[] = $item;
+            foreach ($this->getChildren() as $i => $child) {
+                if ($child === $refItem) {
+                    $p1 = array_slice($this->getChildren(), 0, $i-1);
+                    $p2 = array_slice($this->getChildren(), $i);
+                    $this->setChildren(array_merge($p1, $it, $p2));
+                }
             }
-            $this->setChildren($newArr);
         }
         return $item;
     }
@@ -266,16 +279,16 @@ class Item extends \Tk\Ui\Element
     /**
      * Get a menu item by its text.
      *
-     * @param string $text
+     * @param string $name
      * @return Item|null
      */
-    public function findByText($text)
+    public function findByName($name)
     {
-        if ($this->getLink()->getText() == $text) {
+        if ($this->getLink()->getText() == $name) {
             return $this;
         }
         foreach($this->getChildren() as $item) {
-            $found = $item->findByText($text);
+            $found = $item->findByName($name);
             if ($found) {
                 return $found;
             }
