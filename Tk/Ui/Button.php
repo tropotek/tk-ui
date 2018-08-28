@@ -147,6 +147,8 @@ class Button extends Element
         if ($this->getRightIcon()) {
             $template->appendTemplate('link', $this->getRightIcon()->show());
         }
+// Not getting here????? why??
+//vd($this->getCssList(), $this->getAttrList());
 
         $template->addCss('link', $this->getCssList());
         $template->setAttr('link', $this->getAttrList());
