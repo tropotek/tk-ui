@@ -101,7 +101,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
 
     /**
      * @return $this
-     * @throws \Exception
      */
     public function reset()
     {
