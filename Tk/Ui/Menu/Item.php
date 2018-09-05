@@ -125,13 +125,12 @@ class Item extends \Tk\Ui\Element
         if (!$refItem) { // prepend to the top of the child array
             $this->setChildren(array_merge($it, $this->getChildren()));
         } else {
-            foreach ($this->getChildren() as $i => $child) {
-                if ($child === $refItem) {
-                    $p1 = array_slice($this->getChildren(), 0, $i);
-                    $p2 = array_slice($this->getChildren(), $i+1);
-                    $this->setChildren(array_merge($p1, $it, $p2));
-                }
+            $newArr = array();
+            foreach ($this->getChildren() as $c) {
+                if ($c === $refItem) $newArr[] = $item;
+                $newArr[] = $c;
             }
+            $this->setChildren($newArr);
         }
         return $item;
     }
@@ -149,13 +148,12 @@ class Item extends \Tk\Ui\Element
                 $this->children[] = $i;
             }
         } else {
-            foreach ($this->getChildren() as $i => $child) {
-                if ($child === $refItem) {
-                    $p1 = array_slice($this->getChildren(), 0, $i-1);
-                    $p2 = array_slice($this->getChildren(), $i);
-                    $this->setChildren(array_merge($p1, $it, $p2));
-                }
+            $newArr = array();
+            foreach ($this->getChildren() as $c) {
+                $newArr[] = $c;
+                if ($c === $refItem) $newArr[] = $item;
             }
+            $this->setChildren($newArr);
         }
         return $item;
     }

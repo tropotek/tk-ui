@@ -20,9 +20,8 @@ namespace Tk\Ui;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
+abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
-
     use \Tk\Dom\AttributesTrait;
     use \Tk\Dom\CssTrait;
 
@@ -60,6 +59,10 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
             $title = ucwords(preg_replace('/[A-Z_-]/', ' $0', $title));
         $this->setTitle($title);
         $this->setButtonList(\Tk\Ui\ButtonCollection::create());
+
+        $this->setAttr('id', $this->getId());
+        $this->setAttr('aria-labelledby', $this->getId().'-Label');
+        $this->getButtonList()->append(\Tk\Ui\Button::createButton('Close')->setAttr('data-dismiss', 'modal'));
     }
 
     /**
@@ -100,15 +103,6 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     }
 
     /**
-     * @param string|\Dom\Template|\DOMDocument $html
-     * @return $this
-     */
-    public function setContent($html) {
-        $this->content = $html;
-        return $this;
-    }
-
-    /**
      * @return ButtonCollection
      */
     public function getButtonList()
@@ -126,34 +120,38 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         return $this;
     }
 
+    /**
+     * Override this for your own dialogs not the show method
+     * @return \Dom\Template|\DOMDocument|string
+     * @todo NOTE it would be nice to find a way to use show but that does not seem to be an elegant option.
+     */
+    abstract public function doShow();
 
     /**
      * @return \Dom\Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $dialogTemplate = $this->makeDialogTemplate();
 
-        $this->setAttr('id', $this->getId());
-        $this->setAttr('aria-labelledby', $this->getId().'-Label');
-
-        if ($this->content instanceof \Dom\Template) {
-            $template->insertTemplate('content', $this->content);
-        } else if ($this->content instanceof \DOMDocument) {
-            $template->insertHtml('content', $this->content);
+        $template = $this->doShow();
+        if ($template instanceof \Dom\Template) {
+            $dialogTemplate->insertTemplate('content', $template);
+        } else if ($template instanceof \DOMDocument) {
+            $dialogTemplate->insertDoc('content', $template);
         } else {
-            $template->insertHtml('content', $this->content);
+            $dialogTemplate->insertHtml('content', $template);
         }
 
-        $template->appendTemplate('footer', $this->buttonList->show());
-        $template->insertText('title', $this->getTitle());
-        $template->setAttr('title', 'id', $this->getId().'-Label');
+        $dialogTemplate->appendTemplate('footer', $this->buttonList->show());
+        $dialogTemplate->insertText('title', $this->getTitle());
+        $dialogTemplate->setAttr('title', 'id', $this->getId().'-Label');
 
         // Add attributes
-        $template->setAttr('dialog', $this->getAttrList());
-        $template->addCss('dialog', $this->getCssList());
+        $dialogTemplate->setAttr('dialog', $this->getAttrList());
+        $dialogTemplate->addCss('dialog', $this->getCssList());
 
-        return $template;
+        return $dialogTemplate;
     }
 
 
@@ -162,7 +160,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      *
      * @return \Dom\Template
      */
-    public function __makeTemplate()
+    public function makeDialogTemplate()
     {
         $xhtml = <<<HTML
 <div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
