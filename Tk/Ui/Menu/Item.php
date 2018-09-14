@@ -40,9 +40,10 @@ class Item extends \Tk\Ui\Element
     protected $parent = null;
 
 
-
     /**
-     * @param Link $link
+     * @param string $name
+     * @param string|\Tk\Uri $url
+     * @param string $icon
      */
     public function __construct($name = '', $url = null, $icon = null)
     {
