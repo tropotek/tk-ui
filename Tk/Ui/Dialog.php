@@ -63,6 +63,8 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
         $this->setAttr('id', $this->getId());
         $this->setAttr('aria-labelledby', $this->getId().'-Label');
         $this->getButtonList()->append(\Tk\Ui\Button::createButton('Close')->setAttr('data-dismiss', 'modal'));
+
+        $this->init();
     }
 
     /**
@@ -87,7 +89,7 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle()
     {
         return $this->title;
     }
@@ -119,6 +121,12 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
         $this->buttonList = $buttonList;
         return $this;
     }
+
+    /**
+     * Override this if you need it
+     * It will be called after the constructor is executed
+     */
+    public function init() {}
 
     /**
      * Override this for your own dialogs not the show method
