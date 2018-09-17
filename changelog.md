@@ -1,5 +1,13 @@
 #CHANGELOG#
 
+Ver 2.0.36 [2018-09-17]:
+-------------------------------
+  - Added an invoice edit/view page... cool stuff ;-)
+  - Added invoice data
+  - Merge branch 'master' of https://github.com/tropotek/tk-ui
+  - Preparing branch master for new release
+
+
 Ver 2.0.34 [2018-09-11]:
 -------------------------------
   - Still updating new-template branch
