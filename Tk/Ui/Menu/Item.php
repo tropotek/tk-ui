@@ -117,11 +117,14 @@ class Item extends \Tk\Ui\Element
 
     /**
      * @param Item|Item[] $item
-     * @param null|Item $refItem If null the item will be added to the top of the list
+     * @param null|string|Item $refItem If null the item will be added to the top of the list
      * @return Item
      */
     public function prepend($item, $refItem = null)
     {
+        if (is_string($refItem))
+            $refItem = $this->findByName($refItem);
+
         $it = $this->initChildren($item);
         if (!$refItem) { // prepend to the top of the child array
             $this->setChildren(array_merge($it, $this->getChildren()));
@@ -138,11 +141,14 @@ class Item extends \Tk\Ui\Element
 
     /**
      * @param Item|Item[] $item
-     * @param null|Item $refItem If null the item will be added to the end of the list
+     * @param null|string|Item $refItem If null the item will be added to the end of the list
      * @return Item
      */
     public function append($item, $refItem = null)
     {
+        if (is_string($refItem))
+            $refItem = $this->findByName($refItem);
+
         $it = $this->initChildren($item);
         if (!$refItem) {    // Append to the list as normal
             foreach ($it as $i) {

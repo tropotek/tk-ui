@@ -26,6 +26,7 @@ class ListRenderer extends RendererIface
     {
         $template = $this->getTemplate();
         $menu = $this->getMenu();
+        if (!$menu) return $template;
 
         $menu->addCss($menu->getLink()->getText());
         if (!$menu->hasAttr('id')) {
