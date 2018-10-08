@@ -40,6 +40,8 @@ class Item extends \Tk\Ui\Element
     protected $parent = null;
 
 
+
+
     /**
      * @param string $name
      * @param string|\Tk\Uri $url
@@ -49,7 +51,7 @@ class Item extends \Tk\Ui\Element
     {
         parent::__construct();
         $this->setName($name);
-        if ($name || $url || $icon)
+        //if ($name || $url || $icon)
             $this->setLink(Link::create($name, $url, $icon));
     }
 
