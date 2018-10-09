@@ -50,8 +50,7 @@ abstract class FormDialog extends Dialog
             $this->form->getField('cancel')->addCss('float-right')->setAttr('data-dismiss', 'modal');
         }
         if ($this->form->getField('save')) {
-            $this->form->getField('save')->addCss('float-right')->setIconLeft('')
-                ->setIconRight('fa fa-arrow-right')->appendCallback(array($this, 'doSubmit'));
+            $this->form->getField('save')->addCss('float-right')->setIconLeft('')->setIconRight('fa fa-arrow-right');
         }
         if ($this->form->getField('update')) {
             $this->form->removeField('update');
@@ -74,7 +73,7 @@ abstract class FormDialog extends Dialog
     /**
      * @return \Tk\Form
      */
-    public function getForm(): \Tk\Form
+    public function getForm()
     {
         return $this->form;
     }
