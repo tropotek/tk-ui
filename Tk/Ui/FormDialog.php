@@ -95,6 +95,39 @@ abstract class FormDialog extends Dialog
     {
         $dialogTemplate = parent::show();
 
+        $js = <<<JS
+jQuery(function ($) {
+  
+  function init() {
+    var form = $(this);
+    form.on('submit', function (e) {
+      e.preventDefault();  // prevent form from submitting
+      var f = $(this);
+      f.append('<input type="hidden" name="'+f.attr('id')+'-save" value="'+f.attr('id')+'-save" />');
+      $.post(f.attr('action'), f.serialize(), function (html) {
+        var newEl = $(html).find('#'+f.attr('id'));
+        if (!newEl.length) {
+          console.error('Error: From not submitted. Invalid response from server.');
+          return false;
+        }
+        f.empty().append(newEl.find('> div'));
+        f.trigger('init');
+        
+        if (!f.find('.tk-is-invalid, .alert-danger').length) {
+          // if success then we need to close the dialog and reload the page.
+          document.location = f.attr('action');          
+        }
+      }, 'html');
+      return false;
+    });
+  }
+  
+  $('.modal-body form').on('init', '.modal-dialog', init).each(init);
+  
+});
+JS;
+        $dialogTemplate->appendJs($js);
+
 
         return $dialogTemplate;
     }
