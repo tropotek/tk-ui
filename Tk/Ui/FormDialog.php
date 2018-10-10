@@ -123,7 +123,6 @@ jQuery(function ($) {
   }
   
   $('.modal-body form').on('init', '.modal-dialog', init).each(init);
-  
 });
 JS;
         $dialogTemplate->appendJs($js);
