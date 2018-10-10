@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.44 [2018-10-10]:
+-------------------------------
+  - Merge branch 'master' of https://github.com/tropotek/tk-ui
+
+
 Ver 2.0.42 [2018-10-10]:
 -------------------------------
 
