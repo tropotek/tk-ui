@@ -38,7 +38,7 @@ abstract class FormDialog extends Dialog
     {
         $this->setLarge(true);
         $this->setForm($form);
-        $this->id = $this->form->getId();
+        $this->id = $this->form->getId().'-dialog';
         if (!$title)    // TODO: Not sure if this is correct???
             $title = ucwords(preg_replace('/[A-Z_-]/', ' $0', $title));
         $this->setTitle($title);

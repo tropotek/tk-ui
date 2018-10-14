@@ -197,7 +197,7 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
     public function makeDialogTemplate()
     {
         $xhtml = <<<HTML
-<div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
   <div class="modal-dialog" role="document" var="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
