@@ -25,7 +25,6 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
     use \Tk\Dom\AttributesTrait;
     use \Tk\Dom\CssTrait;
 
-
     /**
      * @var string
      */
@@ -35,6 +34,11 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
      * @var string
      */
     protected $title = '';
+
+    /**
+     * @var bool
+     */
+    protected $large = false;
 
     /**
      * @var string|\Dom\Template|\DOMDocument
@@ -123,6 +127,24 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
     }
 
     /**
+     * @return bool
+     */
+    public function isLarge()
+    {
+        return $this->large;
+    }
+
+    /**
+     * @param bool $large
+     * @return $this
+     */
+    public function setLarge($large)
+    {
+        $this->large = $large;
+        return $this;
+    }
+
+    /**
      * Override this if you need it
      * It will be called after the constructor is executed
      */
@@ -159,6 +181,10 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
         $dialogTemplate->setAttr('dialog', $this->getAttrList());
         $dialogTemplate->addCss('dialog', $this->getCssList());
 
+        if ($this->isLarge()) {
+            $dialogTemplate->addCss('modal-dialog', 'modal-lg');
+        }
+
         return $dialogTemplate;
     }
 
@@ -172,7 +198,7 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
     {
         $xhtml = <<<HTML
 <div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document" var="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="_exampleModalLabel" var="title">New message</h4>

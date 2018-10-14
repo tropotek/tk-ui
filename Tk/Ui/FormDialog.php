@@ -36,6 +36,7 @@ abstract class FormDialog extends Dialog
      */
     public function __construct($form, $title = '')
     {
+        $this->setLarge(true);
         $this->setForm($form);
         $this->id = $this->form->getId();
         if (!$title)    // TODO: Not sure if this is correct???
@@ -130,4 +131,6 @@ JS;
 
         return $dialogTemplate;
     }
+
+
 }
