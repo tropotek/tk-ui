@@ -144,7 +144,7 @@ class ButtonDropdown extends ButtonCollection
       <i var="ico" choice="ico"></i><span var="text">Action</span> <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" var="dropdown-menu">
-      <li repeat="item" var="item"></li>
+      <li class="dropdown-item" repeat="item" var="item"></li>
     </ul>
   </div>
 </div>
