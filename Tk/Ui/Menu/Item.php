@@ -16,6 +16,11 @@ class Item extends \Tk\Ui\Element
     /**
      * @var string
      */
+    protected $var = 'item';
+
+    /**
+     * @var string
+     */
     protected $name = '';
 
     /**
@@ -51,8 +56,7 @@ class Item extends \Tk\Ui\Element
     {
         parent::__construct();
         $this->setName($name);
-        //if ($name || $url || $icon)
-            $this->setLink(Link::create($name, $url, $icon));
+        $this->setLink(Link::create($name, $url, $icon));
     }
 
     /**
@@ -115,6 +119,24 @@ class Item extends \Tk\Ui\Element
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVar()
+    {
+        return $this->var;
+    }
+
+    /**
+     * @param string $var
+     * @return Item
+     */
+    public function setVar($var)
+    {
+        $this->var = $var;
+        return $this;
     }
 
     /**
@@ -388,4 +410,48 @@ class Item extends \Tk\Ui\Element
         }
         return $str;
     }
+
+    /**
+     * @return \Dom\Template
+     */
+    public function show()
+    {
+        $template = parent::show();
+        if (!$this->isVisible()) {
+            return $template;
+        }
+
+        if ($this->getLink()->getUrl()) {
+            $template->appendTemplate('item', $this->getLink()->show());
+        } else {
+            if ($this->getLink()->getIcon()) {
+                $template->appendTemplate('item', $this->getLink()->getIcon()->show());
+            }
+            if ($this->getLink()->getText()) {
+                $template->appendHtml('item', '<span>' . $this->getLink()->getText() . '</span>');
+            }
+            if ($this->getLink()->getRightIcon()) {
+                $template->appendTemplate('item', $this->getLink()->getRightIcon()->show());
+            }
+        }
+
+        $template->addCss('item', $this->getCssList());
+        $template->setAttr('item', $this->getAttrList());
+
+        return $template;
+    }
+
+    /**
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        $html = <<<HTML
+<span var="item"></span>
+HTML;
+        return \Dom\Loader::load($html);
+    }
+
+
+
 }

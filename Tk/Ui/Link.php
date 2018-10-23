@@ -80,48 +80,6 @@ class Link extends Element
     }
 
     /**
-     * @return \Dom\Template
-     */
-    public function show()
-    {
-        $template = parent::show();
-        if (!$this->isVisible()) {
-            return $template;
-        }
-
-        $space = '';
-        if ($this->getIcon()) $space = ' ';
-        if ($this->getUrl()) {
-            $template->setAttr('link', 'href', $this->getUrl());
-        }
-        if ($this->getIcon()) {
-            $template->appendTemplate('link', $this->getIcon()->show());
-        }
-        if ($this->getText()) {
-            $template->appendHtml('link', $space . '<span>' . $this->getText() . '</span>');
-        }
-        if ($this->getRightIcon()) {
-            $template->appendTemplate('link', $this->getRightIcon()->show());
-        }
-
-        $template->addCss('link', $this->getCssList());
-        $template->setAttr('link', $this->getAttrList());
-
-        return $template;
-    }
-
-    /**
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        $html = <<<HTML
-<a href="#" var="link"></a>
-HTML;
-        return \Dom\Loader::load($html);
-    }
-
-    /**
      * @return string
      */
     public function getText()
@@ -193,6 +151,50 @@ HTML;
     {
         $this->rightIcon = $rightIcon;
         return $this;
+    }
+
+    /**
+     * @return \Dom\Template
+     */
+    public function show()
+    {
+        $template = $this->getTemplate();
+
+        $space = '';
+        if ($this->getIcon()) $space = ' ';
+        if ($this->getIcon()) {
+            $template->appendTemplate('link', $this->getIcon()->show());
+        }
+        if ($this->getText()) {
+            $template->appendHtml('link', $space . '<span>' . $this->getText() . '</span>');
+        }
+        if ($this->getRightIcon()) {
+            $template->appendTemplate('link', $this->getRightIcon()->show());
+        }
+
+        parent::show();
+        if (!$this->isVisible()) {
+            return $template;
+        }
+
+        if ($this->getUrl()) {
+            $template->setAttr('link', 'href', $this->getUrl());
+        }
+        $template->addCss('link', $this->getCssList());
+        $template->setAttr('link', $this->getAttrList());
+
+        return $template;
+    }
+
+    /**
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        $html = <<<HTML
+<a href="#" var="link"></a>
+HTML;
+        return \Dom\Loader::load($html);
     }
 
 }

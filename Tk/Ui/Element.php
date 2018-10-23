@@ -50,7 +50,6 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
     {
         /** @var \Dom\Template $template */
         $template = $this->getTemplate();
-
         // callback
         if ($this->hasOnShow()) {
             call_user_func_array($this->getOnShow(), array($this));
@@ -77,13 +76,15 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
     }
 
     /**
-     * function (\Tk\Ui\Button $button) {}
+     * function (\Tk\Ui\Element $el) {}
      *
      * @param callable|null $onShow
+     * @return Element
      */
     public function setOnShow($onShow)
     {
         $this->onShow = $onShow;
+        return $this;
     }
 
     /**

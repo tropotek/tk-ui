@@ -52,32 +52,17 @@ class ListRenderer extends RendererIface
         $ul = $this->getTemplate()->getRepeat('list');
         foreach ($list as $item) {
             $li = $this->getTemplate()->getRepeat('item');
-            if ($item->getLink()) {
-                if ($item->getLink()->getUrl()) {
-                    $li->appendTemplate('item', $item->getLink()->show());
-                } else {
-                    if ($item->getLink()->getIcon()) {
-                        $li->appendTemplate('item', $item->getLink()->getIcon()->show());
-                    }
-                    if ($item->getLink()->getText()) {
-                        $li->appendHtml('item', '<span>' . $item->getLink()->getText() . '</span>');
-                    }
-                    if ($item->getLink()->getRightIcon()) {
-                        $li->appendTemplate('item', $item->getLink()->getRightIcon()->show());
-                    }
-                }
-            }
+
+            // Render Item into this template
+            $item->setTemplate($li);
+            $item->setVar('item');
+            $li->appendTemplate('item', $item->show());
 
             if ($item->hasChildren()) {
                 $item->addCss('submenu');
                 $ulSub = $this->iterate($item->getChildren(), $n+1);
-                //$ulSub->addCss('list', 'submenu');
                 $li->appendTemplate('item', $ulSub);
             }
-
-            $li->addCss('item', $item->getCssList());
-            $li->setAttr('item', $item->getAttrList());
-
             $ul->appendTemplate('list', $li);
         }
         return $ul;
