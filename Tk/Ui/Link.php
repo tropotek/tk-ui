@@ -197,4 +197,20 @@ HTML;
         return \Dom\Loader::load($html);
     }
 
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $url = '';
+        if ($this->getUrl())
+            $url = $this->getUrl()->toString();
+        return sprintf('{
+          text: "%s",
+          url: "%s",
+          icon: "%s",
+          rightIcon: "%s"
+        }', $this->getText(), $url, $this->getIcon(), $this->getRightIcon());
+    }
 }

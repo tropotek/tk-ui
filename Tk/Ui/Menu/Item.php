@@ -12,6 +12,10 @@ use Tk\Ui\Link;
  */
 class Item extends \Tk\Ui\Element
 {
+    /**
+     * @var string
+     */
+    protected $htmlTemplate = '<li var="item"></li>';
 
     /**
      * @var string
@@ -377,6 +381,65 @@ class Item extends \Tk\Ui\Element
 
 
     /**
+     * @return \Dom\Template
+     */
+    public function show()
+    {
+        $template = parent::show();
+        if (!$this->isVisible()) {
+            return $template;
+        }
+
+        if ($this->getLink()->getUrl()) {
+            $template->appendTemplate($this->getVar(), $this->getLink()->show());
+        } else {
+            if ($this->getLink()->getIcon()) {
+                $template->appendTemplate($this->getVar(), $this->getLink()->getIcon()->show());
+            }
+            if ($this->getLink()->getText()) {
+                $template->appendHtml($this->getVar(), '<span>' . $this->getLink()->getText() . '</span>');
+            }
+            if ($this->getLink()->getRightIcon()) {
+                $template->appendTemplate($this->getVar(), $this->getLink()->getRightIcon()->show());
+            }
+        }
+
+        $template->addCss($this->getVar(), $this->getCssList());
+        $template->setAttr($this->getVar(), $this->getAttrList());
+
+        return $template;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlTemplate()
+    {
+        return $this->htmlTemplate;
+    }
+
+    /**
+     * @param string $htmlTemplate
+     * @return Item
+     */
+    public function setHtmlTemplate($htmlTemplate)
+    {
+        $this->htmlTemplate = $htmlTemplate;
+        return $this;
+    }
+
+
+    /**
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        return \Dom\Loader::load($this->getHtmlTemplate());
+    }
+
+
+
+    /**
      * @return string
      */
     public function __toString()
@@ -410,48 +473,5 @@ class Item extends \Tk\Ui\Element
         }
         return $str;
     }
-
-    /**
-     * @return \Dom\Template
-     */
-    public function show()
-    {
-        $template = parent::show();
-        if (!$this->isVisible()) {
-            return $template;
-        }
-
-        if ($this->getLink()->getUrl()) {
-            $template->appendTemplate('item', $this->getLink()->show());
-        } else {
-            if ($this->getLink()->getIcon()) {
-                $template->appendTemplate('item', $this->getLink()->getIcon()->show());
-            }
-            if ($this->getLink()->getText()) {
-                $template->appendHtml('item', '<span>' . $this->getLink()->getText() . '</span>');
-            }
-            if ($this->getLink()->getRightIcon()) {
-                $template->appendTemplate('item', $this->getLink()->getRightIcon()->show());
-            }
-        }
-
-        $template->addCss('item', $this->getCssList());
-        $template->setAttr('item', $this->getAttrList());
-
-        return $template;
-    }
-
-    /**
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        $html = <<<HTML
-<span var="item"></span>
-HTML;
-        return \Dom\Loader::load($html);
-    }
-
-
 
 }

@@ -38,7 +38,6 @@ class ListRenderer extends RendererIface
         $ul->setAttr('list', $this->getMenu()->getAttrList());
 
         $template->replaceTemplate('menu', $ul);
-
         return $template;
     }
 
@@ -51,19 +50,17 @@ class ListRenderer extends RendererIface
     {
         $ul = $this->getTemplate()->getRepeat('list');
         foreach ($list as $item) {
-            $li = $this->getTemplate()->getRepeat('item');
-
-            // Render Item into this template
-            $item->setTemplate($li);
-            $item->setVar('item');
-            $li->appendTemplate('item', $item->show());
-
+            $li = null;
             if ($item->hasChildren()) {
                 $item->addCss('submenu');
                 $ulSub = $this->iterate($item->getChildren(), $n+1);
-                $li->appendTemplate('item', $ulSub);
+                $li = $item->show();
+                $li->appendTemplate($item->getVar(), $ulSub);
+            } else {
+                $li = $item->show();
             }
-            $ul->appendTemplate('list', $li);
+            if ($li)
+                $ul->appendTemplate('list', $li);
         }
         return $ul;
     }
@@ -76,7 +73,6 @@ class ListRenderer extends RendererIface
     {
         $xhtml = <<<HTML
 <div var="menu">
-  <li var="item" repeat="item"></li>
   <ul var="list" repeat="list"></ul>
 </div>
 HTML;

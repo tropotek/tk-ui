@@ -52,4 +52,14 @@ class Icon extends Element
         $html = '<i var="icon"></i>';
         return \Dom\Loader::load($html);
     }
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf('{
+          css: "%s",
+          attr: "%s"
+        }', $this->getCssString(), $this->getAttrString());
+    }
 }
