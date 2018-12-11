@@ -40,7 +40,7 @@ class CrumbsHandler implements Subscriber
         if (!$crumbs) throw new \Tk\Exception('Error creating crumb instance.');
 
         /** @var \Tk\Controller\Iface $controller */
-        $this->controller = $event->getController();
+        $this->controller = $event->getControllerObject();
         if ($this->controller instanceof \Tk\Controller\Iface) {
             // ignore adding crumbs if param in request URL
             if ($this->controller->getRequest()->has(\Tk\Crumbs::CRUMB_IGNORE)) {
