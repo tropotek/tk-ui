@@ -103,6 +103,14 @@ class ButtonCollection extends Element
     }
 
     /**
+     * Remove all buttons and start again
+     */
+    public function reset()
+    {
+        $this->linkList = array();
+    }
+
+    /**
      * @param string $title
      * @return null|Element
      */
