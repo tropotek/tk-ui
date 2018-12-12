@@ -85,7 +85,7 @@ JS;
                 $var = $config->get('template.var.page.breadcrumbs');
             if ($template->keyExists('var', $var)) {
                 $template->replaceTemplate($var, $crumbs->show());
-                $template->setChoice($var);
+                $template->show($var);
             }
         }
     }
