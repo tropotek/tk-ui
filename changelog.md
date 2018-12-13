@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 2.0.54 [2018-12-13]:
+-------------------------------
+  - Merge branch 'master' of https://github.com/tropotek/tk-ui
+  - Added maintenance mode to site settings
+
+
 Ver 2.0.52 [2018-11-22]:
 -------------------------------
 
