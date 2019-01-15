@@ -163,13 +163,13 @@ class AjaxSelect extends \Tk\Ui\Dialog
 jQuery(function($) {
   
   $('.tk-dialog-ajax-select').each(function () {
-    let dialog = $(this);
-    let settings = $.extend({}, {
+    var dialog = $(this);
+    var settings = $.extend({}, {
         selectParam : 'id'
       }, dialog.data());
     
-    let launchBtn = null;
-    let launchData = {};
+    var launchBtn = null;
+    var launchData = {};
     processing(false);
     
     dialog.find('.btn-search').click(function(e) {
@@ -177,8 +177,8 @@ jQuery(function($) {
       if (dialog.find('.input-search').val())
         settings.ajaxParams.keywords = dialog.find('.input-search').val();
       $.get(settings.ajaxUrl, settings.ajaxParams, function (data) {
-        let panel = dialog.find('.dialog-table').empty();
-        let table = buildTable(data);
+        var panel = dialog.find('.dialog-table').empty();
+        var table = buildTable(data);
         panel.append(table);
         processing(false);
       });
@@ -189,9 +189,9 @@ jQuery(function($) {
         return $('<p class="text-center" style="margin-top: 10px;font-weight: bold;font-style: italic;">No Data Found!</p>');
       }
       //let table = $('<table class="table" style="margin-top: 10px;"><tr><th>ID</th><th>Name</th></tr> <tr class="data-tpl"><td class="cell-id"></td><td class="cell-name"><a href="javascript:;" class="cell-name-url"></a></td></tr> </table>');
-      let table = $('<table class="table" style="margin-top: 10px;"><tr><th>Name</th></tr> <tr class="data-tpl"><td class="cell-name"><a href="javascript:;" class="cell-name-url"></a></td></tr> </table>');
+      var table = $('<table class="table" style="margin-top: 10px;"><tr><th>Name</th></tr> <tr class="data-tpl"><td class="cell-name"><a href="javascript:;" class="cell-name-url"></a></td></tr> </table>');
       $.each(data, function (i, obj) {
-        let row = table.find('tr.data-tpl').clone();
+        var row = table.find('tr.data-tpl').clone();
         row.removeClass('data-tpl').addClass('data');
         var href = settings.actionUrl+'&selectedId=' + obj[settings.selectParam];
         if (!$.isEmptyObject(launchData)) {
@@ -236,7 +236,7 @@ jQuery(function($) {
     });
     
     dialog.find('.input-search').on('keyup', function(e) {
-      let code = (e.keyCode ? e.keyCode : e.which);
+      var code = (e.keyCode ? e.keyCode : e.which);
       if(code === 13) { //Enter keycode
           dialog.find('.btn-search').click();
       }    
