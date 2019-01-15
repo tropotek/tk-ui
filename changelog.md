@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 2.0.56 [2019-01-16]:
+-------------------------------
+  - In the project Edit and View add the "Add Member" dialog as there is no functionality there a
+   the moment
+
+
 Ver 2.0.54 [2018-12-13]:
 -------------------------------
   - Merge branch 'master' of https://github.com/tropotek/tk-ui
