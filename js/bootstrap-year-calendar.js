@@ -24,8 +24,8 @@ jQuery(function ($) {
       if (cal.getYear() !== currentYear) {
         currentYear = cal.getYear();
         $.getJSON($(this).data('src'), {
-          companyId: $(this).data('companyid'),
-          subjectId: $(this).data('subjectid'),
+          companyId: $(this).data('companyId'),
+          subjectId: $(this).data('subjectId'),
           year: currentYear
         }, function (data) {
           var colorMax = '#5E92C0';
@@ -45,6 +45,9 @@ jQuery(function ($) {
               var year = parseInt(data.first.dateStart.date.substr(0, 4));
               cal.setYear(year);
           }
+        }).fail(function(r, e, m) {
+          //console.log(r);
+          console.error('Calendar Error: ' + r.responseJSON.message);
         });
       }
     },
