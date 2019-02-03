@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.60 [2019-02-04]:
+-------------------------------
+  - Trying to fix the view company error for safari browsers
+
+
 Ver 2.0.58 [2019-01-30]:
 -------------------------------
 
