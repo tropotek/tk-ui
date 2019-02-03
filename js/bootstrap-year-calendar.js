@@ -24,15 +24,11 @@ jQuery(function ($) {
       if (cal.getYear() !== currentYear) {
         currentYear = cal.getYear();
 
-        console.log({
-          companyId: $(this).data('companyId'),
-          subjectId: $(this).data('subjectId'),
-          year: currentYear
-        });
-
         $.getJSON($(this).data('src'), {
           companyId: $(this).attr('data-company-id'),
-          subjectId: $(this).data('data-subject-id'),
+          subjectId: $(this).attr('data-subject-id'),
+          // companyId: $(this).data('companyId'),
+          // subjectId: $(this).data('subjectId'),
           year: currentYear
         }, function (data) {
           var colorMax = '#5E92C0';
