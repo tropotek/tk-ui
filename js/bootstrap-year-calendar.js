@@ -23,9 +23,16 @@ jQuery(function ($) {
 
       if (cal.getYear() !== currentYear) {
         currentYear = cal.getYear();
-        $.getJSON($(this).data('src'), {
+
+        console.log({
           companyId: $(this).data('companyId'),
           subjectId: $(this).data('subjectId'),
+          year: currentYear
+        });
+
+        $.getJSON($(this).data('src'), {
+          companyId: $(this).attr('data-company-id'),
+          subjectId: $(this).data('data-subject-id'),
           year: currentYear
         }, function (data) {
           var colorMax = '#5E92C0';
