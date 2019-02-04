@@ -23,12 +23,28 @@ jQuery(function ($) {
 
       if (cal.getYear() !== currentYear) {
         currentYear = cal.getYear();
+        var companyId = 0;
+        var subjectId = 0;
+        if (config && config.subjectId) {
+          subjectId = config.subjectId;
+        }
+        if ($(this).data('subjectId'))
+          subjectId = $(this).data('subjectId');
+        if (Uri !== undefined) {
+          var url = new Uri();
+          if (url.get('companyId')) companyId = parseInt(url.get('companyId'));
+        }
+        if ($(this).data('companyId'))
+          companyId = $(this).data('companyId');
+
 
         $.getJSON($(this).data('src'), {
-          companyId: $(this).attr('data-company-id'),
-          subjectId: $(this).attr('data-subject-id'),
+          // companyId: $(this).attr('data-company-id'),
+          // subjectId: $(this).attr('data-subject-id'),
           // companyId: $(this).data('companyId'),
           // subjectId: $(this).data('subjectId'),
+          companyId: companyId,
+          subjectId: subjectId,
           year: currentYear
         }, function (data) {
           var colorMax = '#5E92C0';
@@ -44,11 +60,11 @@ jQuery(function ($) {
             });
             cal.setDataSource(data.list);
           } else if (cal.tkFlag === undefined && data.first) {
-              cal.tkFlag = 'defined';
-              var year = parseInt(data.first.dateStart.date.substr(0, 4));
-              cal.setYear(year);
+            cal.tkFlag = 'defined';
+            var year = parseInt(data.first.dateStart.date.substr(0, 4));
+            cal.setYear(year);
           }
-        }).fail(function(r, e, m) {
+        }).fail(function (r, e, m) {
           //console.log(r);
           console.error('Calendar Error: ' + r.responseJSON.message);
         });
