@@ -1,8 +1,8 @@
 <?php
 namespace Tk\Listener;
 
+use Symfony\Component\HttpKernel\KernelEvents;
 use Tk\Event\Subscriber;
-use Tk\Kernel\KernelEvents;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -30,17 +30,17 @@ class CrumbsHandler implements Subscriber
     }
 
     /**
-     * @param \Tk\Event\ControllerEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\ControllerEvent $event
      * @throws \Tk\Exception
      */
-    public function onController(\Tk\Event\ControllerEvent $event)
+    public function onController(\Symfony\Component\HttpKernel\Event\ControllerEvent $event)
     {
         $config = \Bs\Config::getInstance();
         $crumbs = $config->getCrumbs();
         if (!$crumbs) throw new \Tk\Exception('Error creating crumb instance.');
 
         /** @var \Tk\Controller\Iface $controller */
-        $this->controller = $event->getControllerObject();
+        $this->controller = $event->getController();
         if ($this->controller instanceof \Tk\Controller\Iface) {
             // ignore adding crumbs if param in request URL
             if ($this->controller->getRequest()->has(\Tk\Crumbs::CRUMB_IGNORE)) {
@@ -91,9 +91,9 @@ JS;
     }
 
     /**
-     * @param \Tk\Event\RequestEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
      */
-    public function onFinishRequest(\Tk\Event\RequestEvent $event)
+    public function onFinishRequest(\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event)
     {
         $config = \Bs\Config::getInstance();
         $crumbs = $config->getCrumbs();
