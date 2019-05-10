@@ -20,7 +20,7 @@ class ActionPanelHandler implements Subscriber
     public function onShowController(\Tk\Event\Event $event)
     {
         /** @var \Bs\Controller\Iface $controller */
-        $controller = $event->get('controller');
+        $controller = \Tk\Event\Event::findControllerObject($event);
         if (!$controller instanceof \Tk\Controller\Iface) return;
         if (!method_exists($controller, 'getActionPanel')) return;
 
