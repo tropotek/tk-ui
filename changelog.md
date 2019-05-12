@@ -1,5 +1,9 @@
 #CHANGELOG#
 
+Ver 3.0.0 [2019-05-12]:
+-------------------------------
+
+
 Ver 2.0.64 [2019-02-05]:
 -------------------------------
   - Trying another fix for the view company calendar issue
