@@ -33,7 +33,7 @@ class CrumbsHandler implements Subscriber
      * @param \Symfony\Component\HttpKernel\Event\ControllerEvent $event
      * @throws \Tk\Exception
      */
-    public function onController(\Symfony\Component\HttpKernel\Event\ControllerEvent $event)
+    public function onController($event)
     {
         $config = \Bs\Config::getInstance();
         $crumbs = $config->getCrumbs();
