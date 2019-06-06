@@ -148,7 +148,7 @@ class AjaxSelect extends \Tk\Ui\Dialog
 
         if ($this->notes) {
             $template->insertHtml('notes', $this->notes);
-            $template->setChoice('notes');
+            $template->setVisible('notes');
         }
 
         $ajaxUrl = $this->ajaxUrl->toString();
