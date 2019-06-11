@@ -99,31 +99,37 @@ class ButtonDropdown extends ButtonCollection
         if ($this->getIcon()) {
             $template->replaceTemplate('ico', $this->getIcon()->show());
         } else {
-            $template->hide('ico');
+            $template->setVisible('ico', false);
         }
 
-
-        if (count($this->linkList) == 1) {
+        if (count($this->linkList) <= 0) {
+            $template->setAttr('btn', 'href', '#');
+            $this->addCss('disabled');
+            $template->addCss('btn', $this->getCssList());
+            $template->setAttr('btn', $this->getAttrList());
+            $template->setVisible('dropdown', false);
+        } else if (count($this->linkList) == 1) {
             /** @var \Tk\Ui\Link $link */
             $link = $this->linkList[0];
             $template->setAttr('btn', 'href', $link->getUrl());
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
-            $template->hide('dropdown');
+            $template->setVisible('dropdown', false);
         } else {
             /** @var $btn Link */
-            foreach($this->linkList as $link) {
+            foreach ($this->linkList as $link) {
                 $item = $template->getRepeat('item');
                 $item->appendTemplate('item', $link->show());
                 $item->appendRepeat();
             }
-            $this->setAttr('id', 'dropdown-'.$this->getId());
-            $template->setAttr('dropdown-menu', 'aria-labelledby', 'dropdown-'.$this->getId());
+            $this->setAttr('id', 'dropdown-' . $this->getId());
+            $template->setAttr('dropdown-menu', 'aria-labelledby', 'dropdown-' . $this->getId());
 
             $template->addCss('dropdown-toggle', $this->getCssList());
             $template->setAttr('dropdown-toggle', $this->getAttrList());
-            $template->hide('btn-group');
+            $template->setVisible('btn-group', false);
         }
+
 
         return $template;
     }
