@@ -13,7 +13,7 @@ class ListRenderer extends RendererIface
      * @param Menu $menu
      * @return ListRenderer
      */
-    static function create(Menu $menu)
+    static function create($menu = null)
     {
         $obj = new static($menu);
         return $obj;

@@ -17,20 +17,29 @@ abstract class RendererIface extends \Dom\Renderer\Renderer implements \Dom\Rend
 
 
     /**
-     * @param Menu $menu
+     * @param null|Menu $menu
      */
-    public function __construct(Menu $menu)
+    public function __construct($menu = null)
     {
-        $this->menu = $menu;
+        $this->setMenu($menu);
     }
 
     /**
-     *
      * @return Menu
      */
     public function getMenu()
     {
         return $this->menu;
+    }
+
+    /**
+     * @param Menu $menu
+     * @return RendererIface
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
+        return $this;
     }
 
 
