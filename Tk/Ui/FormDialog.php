@@ -20,7 +20,7 @@ namespace Tk\Ui;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-abstract class FormDialog extends Dialog
+class FormDialog extends Dialog
 {
 
 
@@ -107,16 +107,21 @@ jQuery(function ($) {
       f.append('<input type="hidden" name="'+f.attr('id')+'-save" value="'+f.attr('id')+'-save" />');
       $.post(f.attr('action'), f.serialize(), function (html) {
         var newEl = $(html).find('#'+f.attr('id'));
+          console.log(newEl);
         if (!newEl.length) {
           console.error('Error: From not submitted. Invalid response from server.');
           return false;
         }
         f.empty().append(newEl.find('> div'));
         f.trigger('init');
-        
-        if (!f.find('.tk-is-invalid, .alert-danger').length) {
+
+        if (!f.find('.tk-is-invalid, .is-invalid, .alert-danger').length) {
           // if success then we need to close the dialog and reload the page.
-          document.location = f.attr('action');          
+          if (newEl.data('redirect')) {
+            document.location = newEl.data('redirect');            
+          } else {
+            document.location = f.attr('action');
+          }
         }
       }, 'html');
       return false;
@@ -128,9 +133,20 @@ jQuery(function ($) {
 JS;
         $dialogTemplate->appendJs($js);
 
+        // TODO: Check this does not interfere with anything
+        $dialogTemplate->appendTemplate('content', $this->getForm()->getRenderer()->show());
 
         return $dialogTemplate;
     }
 
 
+    /**
+     * Override this for your own dialogs not the show method
+     * @return \Dom\Template|\DOMDocument|string
+     * @todo NOTE it would be nice to find a way to use show but that does not seem to be an elegant option.
+     */
+    public function doShow()
+    {
+
+    }
 }
