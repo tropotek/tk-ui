@@ -48,6 +48,11 @@ class DialogBox extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayI
     protected $title = '';
 
     /**
+     * @var string
+     */
+    protected $sizeCss = '';
+
+    /**
      * @var bool
      */
     protected $large = false;
@@ -165,12 +170,48 @@ class DialogBox extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayI
     }
 
     /**
+     * @return string
+     */
+    public function getSizeCss(): string
+    {
+        return $this->sizeCss;
+    }
+
+    /**
+     * @param string $sizeCss
+     * @return DialogBox
+     */
+    public function setSizeCss(string $sizeCss): DialogBox
+    {
+        $this->sizeCss = $sizeCss;
+        return $this;
+    }
+
+    /**
      * @param callable|null $onInit
      * @return DialogBox
      */
     public function setOnInit($onInit)
     {
         $this->onInit = $onInit;
+        return $this;
+    }
+
+    /**
+     * @return \Dom\Template|\DOMDocument|string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param \Dom\Template|\DOMDocument|string $content
+     * @return DialogBox
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
         return $this;
     }
 
@@ -202,12 +243,18 @@ class DialogBox extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayI
         $template->insertText('title', $this->getTitle());
         $template->setAttr('title', 'id', $this->getId().'-Label');
 
+        if ($this->getContent()) {
+            $template->appendHtml('content', $this->getContent());
+        }
+
         // Add attributes
         $template->setAttr('dialog', $this->getAttrList());
         $template->addCss('dialog', $this->getCssList());
 
         if ($this->isLarge()) {
             $template->addCss('modal-dialog', 'modal-lg');
+        } else if ($this->getSizeCss()) {
+            $template->addCss('modal-dialog', $this->getSizeCss());
         }
 
         return $template;
