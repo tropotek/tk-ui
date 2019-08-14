@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 3.0.10 [2019-08-14]:
+-------------------------------
+  - Added new filemanager
+  - Added thumb generator to files
+
+
 Ver 3.0.8 [2019-06-20]:
 -------------------------------
   - Added new top menu for Canvas
