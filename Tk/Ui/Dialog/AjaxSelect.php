@@ -3,22 +3,6 @@ namespace Tk\Ui\Dialog;
 
 
 /**
- * This class uses the bootstrap dialog box model
- * @see http://getbootstrap.com/javascript/#modals
- *
- * <code>
- * // doDefault()
- * $this->dialog = new \App\Ui\Dialog\FindUser('Enroll Student');
- * $this->dialog->execute($request);
- *
- * ...
- * // show()
- * $template->insertTemplate('dialog', $this->dialog->show());
- * $template->setAttr('modelBtn', 'data-target', '#'.$this->dialog->getId());
- *
- * </code>
- *
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud

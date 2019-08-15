@@ -3,31 +3,7 @@ namespace Tk\Ui;
 
 
 
-/**
- * This is similar to the Dialog object except it works as a standalone dialog using
- * callable events that you can use to fill its content.
- *
- *
- * This class uses the bootstrap dialog box model
- * @link http://getbootstrap.com/javascript/#modals
- *
- *
- * To create the dialog:
- *
- *   $dialog = DialogBox::create('myDialog', 'My Dialog Title');
- *   $dialog->setOnInit(function ($dialog) { ... });
- *   $dialog->setOnShow(function ($dialog) { $template = $dialog->getTemplate(); });
- *   $template->appendBodyTemplate($dialog->show());
- *
- * To add a close button to the footer:
- *
- *    $dialog->getButtonList()->append(\Tk\Ui\Button::createButton('Close')->setAttr('data-dismiss', 'modal'));
- *
- * Launch Button:
- *
- *    <a href="#" data-toggle="modal" data-target="#{id}"><i class="fa fa-info-circle"></i> {title}</a>
- *
- *
+/** *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
