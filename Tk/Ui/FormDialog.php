@@ -21,6 +21,7 @@ class FormDialog extends Dialog
     /**.
      * @param \Tk\Form $form
      * @param string $title
+     * @deprecated Use the new \Tk\Ui\Dialog\Dialog object
      */
     public function __construct($form, $title = '')
     {
@@ -52,6 +53,7 @@ class FormDialog extends Dialog
      * @param \Tk\Form $form
      * @param string $title
      * @return static
+     * @deprecated Use the new \Tk\Ui\Dialog\Dialog object
      */
     public static function createFormDialog($form, $title = '')
     {

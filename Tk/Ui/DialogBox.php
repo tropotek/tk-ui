@@ -59,6 +59,7 @@ class DialogBox extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayI
      * DialogBox constructor.
      * @param string $dialogId
      * @param string $title
+     * @deprecated Use the new \Tk\Ui\Dialog\Dialog object
      */
     public function __construct($dialogId, $title = '')
     {
@@ -77,6 +78,7 @@ class DialogBox extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayI
      * @param string $dialogId
      * @param string $title
      * @return static
+     * @deprecated Use the new \Tk\Ui\Dialog\Dialog object
      */
     public static function create($dialogId, $title = '')
     {
