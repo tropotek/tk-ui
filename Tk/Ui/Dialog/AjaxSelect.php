@@ -6,7 +6,6 @@ namespace Tk\Ui\Dialog;
  * This class uses the bootstrap dialog box model
  * @see http://getbootstrap.com/javascript/#modals
  *
- *
  * <code>
  * // doDefault()
  * $this->dialog = new \App\Ui\Dialog\FindUser('Enroll Student');
@@ -23,8 +22,9 @@ namespace Tk\Ui\Dialog;
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
+ * @deprecated use \Tk\Ui\Dialog\AjaxSelect
  */
-class AjaxSelect extends \Tk\Ui\Dialog
+class AjaxSelect extends Dialog
 {
     /**
      * @var null|callable
@@ -60,7 +60,7 @@ class AjaxSelect extends \Tk\Ui\Dialog
      */
     public function __construct($title, $ajaxUrl = null)
     {
-        parent::__construct('ajax-select', $title);
+        parent::__construct($title);
         $this->ajaxUrl = \Tk\Uri::create($ajaxUrl);
         $this->addCss('tk-dialog-ajax-select');
     }
@@ -76,16 +76,15 @@ class AjaxSelect extends \Tk\Ui\Dialog
     }
 
     /**
-     * @param callable $callable
+     * @param callable $onSelect
      * @return $this
      * @throws \Tk\Exception
      */
-    public function setOnSelect($callable)
+    public function setOnSelect($onSelect)
     {
-        if (!is_callable($callable)) {
-            throw new \Tk\Exception('Must pass a callable object.');
-        }
-        $this->onSelect = $callable;
+        if (!is_callable($onSelect))
+            throw new \Tk\Exception('Invalid callable object given');
+        $this->onSelect = $onSelect;
         return $this;
     }
 
@@ -123,6 +122,8 @@ class AjaxSelect extends \Tk\Ui\Dialog
      */
     public function execute(\Tk\Request $request)
     {
+        parent::execute($request);
+
         $eventId = $this->getSelectButtonId();
         // Fire the callback if set
         if ($request->has($eventId)) {
@@ -141,14 +142,14 @@ class AjaxSelect extends \Tk\Ui\Dialog
     /**
      * @return \Dom\Template
      */
-    public function doShow()
+    public function show()
     {
-        /** @var \Dom\Template $template */
-        $template = $this->getTemplate();
+        /** @var \Dom\Template $selectTemplate */
+        $selectTemplate = $this->__makeSelectTemplate();
 
         if ($this->notes) {
-            $template->insertHtml('notes', $this->notes);
-            $template->setVisible('notes');
+            $selectTemplate->insertHtml('notes', $this->notes);
+            $selectTemplate->setVisible('notes');
         }
 
         $ajaxUrl = $this->ajaxUrl->toString();
@@ -176,6 +177,7 @@ jQuery(function($) {
       processing(true);
       if (dialog.find('.input-search').val())
         settings.ajaxParams.keywords = dialog.find('.input-search').val();
+      console.log(settings);
       $.get(settings.ajaxUrl, settings.ajaxParams, function (data) {
         var panel = dialog.find('.dialog-table').empty();
         var table = buildTable(data);
@@ -246,7 +248,11 @@ jQuery(function($) {
   
 });
 JS;
-        $template->appendJs($js);
+        $selectTemplate->appendJs($js);
+
+
+        $template = parent::show();
+        $template->appendTemplate('content', $selectTemplate);
 
         return $template;
     }
@@ -254,11 +260,10 @@ JS;
     /**
      * @return \Dom\template
      */
-    public function __makeTemplate()
+    public function __makeSelectTemplate()
     {
         $xhtml = <<<HTML
 <div class="row">
-
   <div class="col-md-12">
     <p var="notes" choice="notes"></p>
     <div class="input-group has-feedback has-feedback-left">
@@ -275,9 +280,8 @@ JS;
   <div class="col-md-12" >
     <div class="dialog-table" style="min-height: 100px;"></div>
   </div>
-  
 </div>
 HTML;
-        return \Dom\Loader::load($xhtml);
+        return \Dom\Loader::load($xhtml, get_class($this).'2');
     }
 }
