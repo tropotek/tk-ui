@@ -350,7 +350,7 @@ HTML;
     }
 
     /**
-     * @return \Tk\Config
+     * @return \Tk\Config|\App\Config
      */
     public function getConfig()
     {
