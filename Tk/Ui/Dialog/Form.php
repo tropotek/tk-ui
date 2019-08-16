@@ -20,6 +20,12 @@ class Form extends Dialog
      */
     protected $jsSubmit = true;
 
+    /**
+     * If true the form is reset once the dialog is closed
+     * @var bool
+     */
+    protected $resetOnHide = true;
+
 
     /**.
      * @param \Tk\Form $form
@@ -56,7 +62,7 @@ class Form extends Dialog
     /**
      * @return bool
      */
-    public function isJsSubmit(): bool
+    public function isJsSubmit()
     {
         return $this->jsSubmit;
     }
@@ -65,9 +71,27 @@ class Form extends Dialog
      * @param bool $jsSubmit
      * @return Form
      */
-    public function setJsSubmit(bool $jsSubmit): Form
+    public function setJsSubmit(bool $jsSubmit)
     {
         $this->jsSubmit = $jsSubmit;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isResetOnHide()
+    {
+        return $this->resetOnHide;
+    }
+
+    /**
+     * @param bool $resetOnHide
+     * @return $this
+     */
+    public function setResetOnHide(bool $resetOnHide)
+    {
+        $this->resetOnHide = $resetOnHide;
         return $this;
     }
 
@@ -96,12 +120,17 @@ class Form extends Dialog
     public function show()
     {
         $template = parent::show();
+        if ($this->isResetOnHide()) {
+            $template->setAttr('dialog', 'data-reset-on-hide', 'true');
+        }
 
         $js = <<<JS
 jQuery(function ($) {
   
   function init() {
     var form = $(this);
+    var dialog = form.closest('.modal');
+    
     form.on('submit', function (e) {
       e.preventDefault();  // prevent form from submitting
       var f = $(this);
@@ -128,6 +157,16 @@ jQuery(function ($) {
       input.remove();
       return false;
     });
+    
+    if (form.find('.has-error, .tk-is-invalid').length > 0) {
+      dialog.modal({show: true});
+    }
+    if (dialog.data('resetOnHide')) {
+        dialog.on('hidden.bs.modal', function () {
+          form.trigger('reset'); // Note does not reset file fields
+        });
+    }
+    
   }
   
   $('.modal-body form').on('init', '.modal-dialog', init).each(init);
