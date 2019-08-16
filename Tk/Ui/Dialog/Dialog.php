@@ -157,6 +157,25 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     }
 
     /**
+     * Add Button, just a helper function
+     *
+     * @param string $name
+     * @param array $attributes
+     * @param string $icon
+     * @return \Tk\Ui\Button
+     */
+    public function addButton($name, $attributes = array(), $icon = '')
+    {
+        if (strtolower($name) == 'close' || strtolower($name) == 'cancel') {
+            $attributes['data-dismiss'] = 'modal';
+        }
+        $attributes['name'] = $name;
+        $attributes['id'] = $this->getId() . '-' . preg_replace('/[^a-z0-9]/i', '_', $name);
+        $btn = $this->getButtonList()->append(\Tk\Ui\Button::createButton($name, $icon)->setAttr($attributes));
+        return $btn;
+    }
+
+    /**
      * @return bool
      */
     public function isLarge()
@@ -328,5 +347,13 @@ HTML;
     {
         $hash = substr(strtolower(preg_replace('/[0-9_\/]+/','',base64_encode(sha1($seed)))),0,8);
         return $hash;
+    }
+
+    /**
+     * @return \Tk\Config
+     */
+    public function getConfig()
+    {
+        return \Tk\Config::getInstance();
     }
 }

@@ -14,6 +14,12 @@ class Form extends Dialog
      */
     protected $form = null;
 
+    /**
+     * Should we try to submit the form via javascript
+     * @var bool
+     */
+    protected $jsSubmit = true;
+
 
     /**.
      * @param \Tk\Form $form
@@ -45,6 +51,24 @@ class Form extends Dialog
     public function getForm()
     {
         return $this->form;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isJsSubmit(): bool
+    {
+        return $this->jsSubmit;
+    }
+
+    /**
+     * @param bool $jsSubmit
+     * @return Form
+     */
+    public function setJsSubmit(bool $jsSubmit): Form
+    {
+        $this->jsSubmit = $jsSubmit;
+        return $this;
     }
 
     /**
@@ -81,7 +105,7 @@ jQuery(function ($) {
     form.on('submit', function (e) {
       e.preventDefault();  // prevent form from submitting
       var f = $(this);
-      f.append('<input type="hidden" name="'+f.attr('id')+'-save" value="'+f.attr('id')+'-save" />');
+      var input = f.append('<input type="hidden" name="'+f.attr('id')+'-save" value="'+f.attr('id')+'-save" />');
       $.post(f.attr('action'), f.serialize(), function (html) {
         var newEl = $(html).find('#'+f.attr('id'));
           console.log(newEl);
@@ -101,6 +125,7 @@ jQuery(function ($) {
           }
         }
       }, 'html');
+      input.remove();
       return false;
     });
   }
@@ -108,7 +133,8 @@ jQuery(function ($) {
   $('.modal-body form').on('init', '.modal-dialog', init).each(init);
 });
 JS;
-        $template->appendJs($js);
+        if ($this->isJsSubmit())
+            $template->appendJs($js);
 
         $template->appendTemplate('content', $this->getForm()->getRenderer()->show());
 
