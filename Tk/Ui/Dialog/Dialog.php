@@ -86,14 +86,17 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
 
 
     /**
-     * @param string $dialogId
      * @param string $title
+     * @param string $dialogId
      */
-    public function __construct($title)
+    public function __construct($title, $dialogId = '')
     {
-        $this->id = $this->makeIdHash($title);
+        $this->id = $dialogId;
+        if (!$this->id)
+            $this->id = $this->makeIdHash($title);
         if (!$title)
             $title = ucwords(preg_replace('/[A-Z_-]/', ' $0', $title));
+
         $this->setTitle($title);
         $this->setButtonList(\Tk\Ui\ButtonCollection::create());
 

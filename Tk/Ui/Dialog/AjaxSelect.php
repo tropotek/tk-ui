@@ -40,11 +40,12 @@ class AjaxSelect extends Dialog
      * DialogBox constructor.
      *
      * @param $title
-     * @param \Tk\Uri|string $ajaxUrl
+     * @param \Tk\Uri|string|null $ajaxUrl
+     * @param string $dialogId
      */
-    public function __construct($title, $ajaxUrl = null)
+    public function __construct($title, $ajaxUrl = null, $dialogId = '')
     {
-        parent::__construct($title);
+        parent::__construct($title, $dialogId);
         $this->ajaxUrl = \Tk\Uri::create($ajaxUrl);
         $this->addCss('tk-dialog-ajax-select');
     }

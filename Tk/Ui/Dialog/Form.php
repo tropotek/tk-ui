@@ -30,10 +30,11 @@ class Form extends Dialog
     /**.
      * @param \Tk\Form $form
      * @param string $title
+     * @param string $dialogId
      */
-    public function __construct($form, $title)
+    public function __construct($form, $title, $dialogId = '')
     {
-        parent::__construct($title);
+        parent::__construct($title, $dialogId);
         $this->setButtonList(\Tk\Ui\ButtonCollection::create());
 
         $this->setLarge(true);
