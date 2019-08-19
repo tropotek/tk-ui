@@ -89,7 +89,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      * @param string $dialogId
      * @param string $title
      */
-    public function __construct($title = '')
+    public function __construct($title)
     {
         $this->id = $this->makeIdHash($title);
         if (!$title)
@@ -106,7 +106,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      * @param string $title
      * @return static
      */
-    public static function create($title = '')
+    public static function create($title)
     {
         $obj = new static($title);
         return $obj;
