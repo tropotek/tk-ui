@@ -155,17 +155,16 @@ jQuery(function ($) {
           }
         }
       }, 'html');
-      input.remove();
       return false;
     });
     
-    if (form.find('.has-error, .tk-is-invalid').length > 0) {
+    if (form.find('.has-error, .tk-is-invalid, .alert-danger').length > 0) {
       dialog.modal({show: true});
     }
     if (dialog.data('resetOnHide')) {
-        dialog.on('hidden.bs.modal', function () {
-          form.trigger('reset'); // Note does not reset file fields
-        });
+      dialog.on('hidden.bs.modal', function () {
+        form.trigger('reset'); // Note does not reset file fields
+      });
     }
     
   }
