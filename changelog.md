@@ -1,5 +1,12 @@
 #CHANGELOG#
 
+Ver 3.0.12 [2019-08-21]:
+-------------------------------
+  - Added upload area to filemanager [dropzone]
+  - UPdated the system to use the new dialog box suite
+  - Some major updates to the \Tk\Ui\Dialog\Dialog objects
+
+
 Ver 3.0.10 [2019-08-14]:
 -------------------------------
   - Added new filemanager
