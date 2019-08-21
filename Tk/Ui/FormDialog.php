@@ -24,6 +24,8 @@ class FormDialog extends Dialog
      */
     public function __construct($form, $title = '')
     {
+        throw new \Tk\Exception('Deprecated Class');
+
         $this->setLarge(true);
         $this->setForm($form);
         $this->id = $this->form->getId().'-dialog';

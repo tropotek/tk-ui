@@ -48,6 +48,8 @@ abstract class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\Di
      */
     public function __construct($dialogId, $title = '')
     {
+        throw new \Tk\Exception('Deprecated Class');
+
         $this->id = $dialogId;
         if (!$title)
             $title = ucwords(preg_replace('/[A-Z_-]/', ' $0', $title));

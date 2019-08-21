@@ -162,7 +162,6 @@ jQuery(function($) {
       processing(true);
       if (dialog.find('.input-search').val())
         settings.ajaxParams.keywords = dialog.find('.input-search').val();
-      console.log(settings);
       $.get(settings.ajaxUrl, settings.ajaxParams, function (data) {
         var panel = dialog.find('.dialog-table').empty();
         var table = buildTable(data);
@@ -180,6 +179,7 @@ jQuery(function($) {
       $.each(data, function (i, obj) {
         var row = table.find('tr.data-tpl').clone();
         row.removeClass('data-tpl').addClass('data');
+        vd(obj);
         var href = settings.actionUrl+'&selectedId=' + obj[settings.selectParam];
         if (!$.isEmptyObject(launchData)) {
           href += '&' + $.param(launchData);
