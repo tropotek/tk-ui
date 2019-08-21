@@ -328,7 +328,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
+<div class="modal" id="" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="_exampleModalLabel" var="dialog">
   <div class="modal-dialog" role="document" var="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
