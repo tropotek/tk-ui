@@ -120,7 +120,7 @@ class AjaxSelect extends Dialog
                     $redirect = $url;
                 }
             }
-            $redirect->remove($this->getSelectButtonId())->remove('selectedId')->redirect();
+            $redirect->remove($this->getSelectButtonId())->remove($this->getSelectButtonId())->remove('selectedId')->redirect();
         }
     }
 
