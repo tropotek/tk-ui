@@ -299,7 +299,11 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         $template->insertText('title', $this->getTitle());
         $template->setAttr('title', 'id', $this->getId().'-Label');
 
-        if ($this->getContent()) {
+        if ($this->getContent() instanceof \DOMDocument) {
+            $template->appendDoc('content', $this->getContent());
+        } else if ($this->getContent() instanceof \Dom\Template) {
+            $template->appendTemplate('content', $this->getContent());
+        } else if ($this->getContent()) {
             $template->appendHtml('content', $this->getContent());
         }
 
