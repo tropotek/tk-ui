@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 3.0.14 [2019-08-23]:
+-------------------------------
+  - Updated dialogs
+  - Updated Dialogs
+
+
 Ver 3.0.12 [2019-08-21]:
 -------------------------------
   - Added upload area to filemanager [dropzone]
