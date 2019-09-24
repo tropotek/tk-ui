@@ -24,7 +24,7 @@ class FormDialog extends Dialog
      */
     public function __construct($form, $title = '')
     {
-        throw new \Tk\Exception('Deprecated Class');
+        throw new \Tk\Exception('Deprecated Class, use "\Tk\Ui\Dialog\Form".');
 
         $this->setLarge(true);
         $this->setForm($form);
