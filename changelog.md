@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 3.0.20 [2019-10-07]:
+-------------------------------
+  - Updated the Skills Company Average Report
+
+
 Ver 3.0.18 [2019-09-24]:
 -------------------------------
   - Updated dialogs and fixed Minutes cell
