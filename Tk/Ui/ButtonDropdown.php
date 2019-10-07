@@ -24,6 +24,11 @@ class ButtonDropdown extends ButtonCollection
      */
     protected $icon = null;
 
+    /**
+     * @var bool
+     */
+    protected $forceList = false;
+
 
     /**
      * @param $text
@@ -79,6 +84,25 @@ class ButtonDropdown extends ButtonCollection
     }
 
     /**
+     * @return bool
+     */
+    public function isForceList(): bool
+    {
+        return $this->forceList;
+    }
+
+    /**
+     * @param bool $forceList
+     * @return ButtonDropdown
+     */
+    public function setForceList(bool $forceList): ButtonDropdown
+    {
+        $this->forceList = $forceList;
+        return $this;
+    }
+
+
+    /**
      * Execute the renderer.
      * Return an object that your framework can interpret and display.
      *
@@ -108,7 +132,7 @@ class ButtonDropdown extends ButtonCollection
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
             $template->setVisible('dropdown', false);
-        } else if (count($this->linkList) == 1) {
+        } else if (!$this->isForceList() && count($this->linkList) == 1) {
             /** @var \Tk\Ui\Link $link */
             $link = $this->linkList[0];
             $template->setAttr('btn', 'href', $link->getUrl());
