@@ -36,7 +36,6 @@ class Form extends Dialog
     {
         parent::__construct($title, $dialogId);
         $this->setButtonList(\Tk\Ui\ButtonCollection::create());
-
         $this->setLarge(true);
         $this->setForm($form);
     }
@@ -97,6 +96,17 @@ class Form extends Dialog
     }
 
     /**
+     * @param \Tk\Request $request
+     */
+    public function execute(\Tk\Request $request)
+    {
+        parent::execute($request);
+        if (!$this->getForm()->hasErrors()) {
+            $this->getForm()->execute($request);
+        }
+    }
+
+    /**
      * @param \Tk\Form $form
      * @return $this
      */
@@ -138,9 +148,8 @@ jQuery(function ($) {
       var input = f.append('<input type="hidden" name="'+f.attr('id')+'-save" value="'+f.attr('id')+'-save" />');
       $.post(f.attr('action'), f.serialize(), function (html) {
         var newEl = $(html).find('#'+f.attr('id'));
-          console.log(newEl);
         if (!newEl.length) {
-          console.error('Error: From not submitted. Invalid response from server.');
+          console.error('Error: Form not submitted. Invalid response from server.');
           return false;
         }
         f.empty().append(newEl.find('> div'));
