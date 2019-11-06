@@ -6,7 +6,6 @@ namespace Tk\Ui\Dialog;
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
- * @deprecated use \Tk\Ui\Dialog\AjaxSelect
  */
 class AjaxSelect extends Dialog
 {
@@ -14,6 +13,11 @@ class AjaxSelect extends Dialog
      * @var null|callable
      */
     protected $onSelect = null;
+
+    /**
+     * @var null|callable
+     */
+    protected $onAjax = null;
 
     /**
      * @var \Tk\Uri
@@ -37,8 +41,6 @@ class AjaxSelect extends Dialog
 
 
     /**
-     * DialogBox constructor.
-     *
      * @param $title
      * @param \Tk\Uri|string|null $ajaxUrl
      * @param string $dialogId
@@ -46,8 +48,20 @@ class AjaxSelect extends Dialog
     public function __construct($title, $ajaxUrl = null, $dialogId = '')
     {
         parent::__construct($title, $dialogId);
-        $this->ajaxUrl = \Tk\Uri::create($ajaxUrl);
+        $this->ajaxUrl = \Tk\Uri::create()->set('ajaxSelect', $this->getId());
+        if ($ajaxUrl)
+            $this->ajaxUrl = \Tk\Uri::create($ajaxUrl);
         $this->addCss('tk-dialog-ajax-select');
+    }
+
+    /**
+     *
+     * @param string $title
+     * @return AjaxSelect|Dialog
+     */
+    public static function create($title)
+    {
+        return new self($title);
     }
 
     /**
@@ -61,6 +75,9 @@ class AjaxSelect extends Dialog
     }
 
     /**
+     *
+     * Callable: function(\Tk\Request $request) {}
+     *
      * @param callable $onSelect
      * @return $this
      * @throws \Tk\Exception
@@ -70,6 +87,22 @@ class AjaxSelect extends Dialog
         if (!is_callable($onSelect))
             throw new \Tk\Exception('Invalid callable object given');
         $this->onSelect = $onSelect;
+        return $this;
+    }
+
+    /**
+     *
+     * Callable: function(\Tk\Request $request) {}
+     *
+     * @param callable $onAjax
+     * @return $this
+     * @throws \Tk\Exception
+     */
+    public function setOnAjax($onAjax)
+    {
+        if (!is_callable($onAjax))
+            throw new \Tk\Exception('Invalid callable object given');
+        $this->onAjax = $onAjax;
         return $this;
     }
 
@@ -109,13 +142,23 @@ class AjaxSelect extends Dialog
     {
         parent::execute($request);
 
+
+        if (is_callable($this->onAjax)) {
+            if ($request->get('ajaxSelect') == $this->getId()) {
+                $data = call_user_func_array($this->onAjax, array($request));
+                \Tk\ResponseJson::createJson($data)->send();
+                exit();
+            }
+        }
+
         $eventId = $this->getSelectButtonId();
         // Fire the callback if set
         if ($request->has($eventId)) {
             $this->data = $request->all();
             $redirect = \Tk\Uri::create();
             if (is_callable($this->onSelect)) {
-                $url = call_user_func_array($this->onSelect, array($this->data));
+                $url = call_user_func_array($this->onSelect, array($request));
+                //$url = call_user_func_array($this->onSelect, array($this->data));
                 if ($url instanceof \Tk\Uri) {
                     $redirect = $url;
                 }
@@ -136,14 +179,16 @@ class AjaxSelect extends Dialog
             $selectTemplate->insertHtml('notes', $this->notes);
             $selectTemplate->setVisible('notes');
         }
+        $ajaxParams = json_encode($this->ajaxParams,\JSON_FORCE_OBJECT);
+        $this->setAttr('data-ajax-params', $ajaxParams);
 
+        // deprecated use onAjax callback
         $ajaxUrl = $this->ajaxUrl->toString();
         $actionUrl = \Tk\Uri::create()->set($this->getSelectButtonId())->toString();
-        $ajaxParams = json_encode($this->ajaxParams,\JSON_FORCE_OBJECT);
-
         $this->setAttr('data-ajax-url', $ajaxUrl);
         $this->setAttr('data-action-url', $actionUrl);
-        $this->setAttr('data-ajax-params', $ajaxParams);
+
+
 
         $js = <<<JS
 jQuery(function($) {
