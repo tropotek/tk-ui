@@ -35,6 +35,11 @@ class Link extends Element
      */
     protected $rightIcon = null;
 
+    /**
+     * @var string
+     */
+    protected $group = '';
+
 
     /**
      * @param string $text
@@ -69,13 +74,14 @@ class Link extends Element
      * @param $text
      * @param null $url
      * @param string $icon
+     * @param string $css
      * @return Link
      * @note this is a helper class to remove the Z
      */
-    public static function createBtn($text, $url = null, $icon = '')
+    public static function createBtn($text, $url = null, $icon = '', $css = 'btn btn-default')
     {
         $obj = self::create($text, $url, $icon);
-        $obj->addCss('btn btn-default');
+        $obj->addCss($css);
         return $obj;
     }
 
@@ -114,6 +120,27 @@ class Link extends Element
         if ($url !== null) {
             $this->url = \Tk\Uri::create($url);
         }
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Setting a button group will render group buttons as per Bootstrap button group standards
+     *
+     * @param string $group
+     * @return $this
+     * @see https://getbootstrap.com/docs/4.3/components/button-group/
+     */
+    public function setGroup($group = '')
+    {
+        $this->group = $group;
         return $this;
     }
 
@@ -210,7 +237,8 @@ HTML;
           text: "%s",
           url: "%s",
           icon: "%s",
-          rightIcon: "%s"
-        }', $this->getText(), $url, $this->getIcon(), $this->getRightIcon());
+          rightIcon: "%s",
+          group: "%s"
+        }', $this->getText(), $url, $this->getIcon(), $this->getRightIcon(), $this->getGroup());
     }
 }

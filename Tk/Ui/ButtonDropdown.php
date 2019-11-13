@@ -126,22 +126,22 @@ class ButtonDropdown extends ButtonCollection
             $template->setVisible('ico', false);
         }
 
-        if (count($this->linkList) <= 0) {
+        if (count($this->elementList) <= 0) {
             $template->setAttr('btn', 'href', '#');
             $this->addCss('disabled');
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
             $template->setVisible('dropdown', false);
-        } else if (!$this->isForceList() && count($this->linkList) == 1) {
+        } else if (!$this->isForceList() && count($this->elementList) == 1) {
             /** @var \Tk\Ui\Link $link */
-            $link = $this->linkList[0];
+            $link = $this->elementList[0];
             $template->setAttr('btn', 'href', $link->getUrl());
             $template->addCss('btn', $this->getCssList());
             $template->setAttr('btn', $this->getAttrList());
             $template->setVisible('dropdown', false);
         } else {
             /** @var $btn Link */
-            foreach ($this->linkList as $link) {
+            foreach ($this->elementList as $link) {
                 $item = $template->getRepeat('item');
                 $item->appendTemplate('item', $link->show());
                 $item->appendRepeat();

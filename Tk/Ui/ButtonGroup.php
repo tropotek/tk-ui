@@ -28,7 +28,7 @@ class ButtonGroup extends ButtonCollection
         }
 
         /** @var $btn Button */
-        foreach($this->linkList as $btn) {
+        foreach($this->elementList as $btn) {
             $tpl = $btn->show();
             $template->appendHtml('btn', '<div class="btn-group" role="group">' . $tpl->toString() . '</div>');
         }

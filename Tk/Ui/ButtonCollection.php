@@ -11,11 +11,7 @@ namespace Tk\Ui;
  */
 class ButtonCollection extends Element
 {
-
-    /**
-     * @var array|Element[]
-     */
-    protected $linkList = array();
+    use ElementCollectionTrait;
 
 
     /**
@@ -40,91 +36,6 @@ class ButtonCollection extends Element
     }
 
     /**
-     * @param Element $button
-     * @param null|Element $refButton
-     * @return mixed
-     */
-    public function append($button, $refButton = null)
-    {
-        if (is_string($refButton)) {
-            $refButton = $this->find($refButton);
-        }
-        if (!$refButton) {
-            $this->linkList[] = $button;
-        } else {
-            $newArr = array();
-            foreach ($this->linkList as $b) {
-                $newArr[] = $b;
-                if ($b === $refButton) $newArr[] = $button;
-            }
-            $this->linkList = $newArr;
-        }
-        return $button;
-    }
-
-    /**
-     * @param Element $button
-     * @param null|Element $refButton
-     * @return mixed
-     */
-    public function prepend($button, $refButton = null)
-    {
-        if (is_string($refButton)) {
-            $refButton = $this->find($refButton);
-        }
-        if (!$refButton) {
-            $this->linkList = array_merge(array($button), $this->linkList);
-        } else {
-            $newArr = array();
-            foreach ($this->linkList as $b) {
-                if ($b === $refButton) $newArr[] = $button;
-                $newArr[] = $b;
-            }
-            $this->linkList = $newArr;
-        }
-        return $button;
-    }
-
-    /**
-     * @param string|Element $button
-     * @return null|Element Return null if no link removed
-     */
-    public function remove($button)
-    {
-        if (is_string($button)) {
-            $button = $this->find($button);
-        }
-        $newArr = array();
-        foreach ($this->linkList as $b) {
-            if ($b !== $button) $newArr[] = $b;
-        }
-        $this->linkList = $newArr;
-        return $button;
-    }
-
-    /**
-     * Remove all buttons and start again
-     */
-    public function reset()
-    {
-        $this->linkList = array();
-    }
-
-    /**
-     * @param string $title
-     * @return null|Element
-     */
-    public function find($title)
-    {
-        /** @var Element $button */
-        foreach ($this->linkList as $button) {
-            if ($button->hasAttr('title') && $button->getAttr('title') == $title)
-                return $button;
-        }
-        return null;
-    }
-
-    /**
      * @return \Dom\Template
      */
     public function show()
@@ -135,7 +46,7 @@ class ButtonCollection extends Element
         }
 
         /** @var Element $srcBtn */
-        foreach ($this->linkList as $srcBtn) {
+        foreach ($this->getElementList() as $srcBtn) {
             $btn = clone $srcBtn;
             $btnTemplate = $btn->show();
             if (!$btn->isVisible()) continue;
@@ -160,9 +71,6 @@ class ButtonCollection extends Element
 HTML;
         return \Dom\Loader::load($html);
     }
-
-
-
 
 
 
