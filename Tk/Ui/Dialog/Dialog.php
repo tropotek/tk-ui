@@ -187,12 +187,12 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     }
 
     /**
-     * @param bool $large
+     * @param bool $b
      * @return $this
      */
-    public function setLarge($large)
+    public function setLarge($b = true)
     {
-        $this->large = $large;
+        $this->large = $b;
         return $this;
     }
 

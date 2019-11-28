@@ -3,6 +3,41 @@ namespace Tk\Ui\Dialog;
 
 
 /**
+ * To create the dialog:
+ *
+ *   $ajaxSelect = \Tk\Ui|AjaxSelect::create('Select Module For New Entry');
+ *   $ajaxSelect->setNotes('Select the module to create the new assessment entry for.');
+ *   $ajaxSelect->setOnAjax(function (\Tk\Request $request) {
+ *   $config = \App\Config::getInstance();
+ *       $filter = array();
+ *       return \App\Db\ObjectMap::create()->findFiltered($filter, \Tk\Db\Tool::create())->toArray();
+ *   });
+ *   $ajaxSelect->setOnSelect(function (\Tk\Request $request) {
+ *       $config = \App\Config::getInstance();
+ *       $selectedId = (int)$request->get('selectedId');
+ *       $obj = \App\Db\ObjectMap::create()->find($selectedId);
+ *       if (!$obj) {
+ *           \Tk\Alert::addWarning('Invalid module selected.');
+ *           return \Tk\Uri::create();
+ *       }
+ *       \Tk\Alert::addSuccess('Some wiz bang message');
+ *       return \Tk\Uri::create();
+ *   });
+ *   $ajaxSelect->execute($request);
+ *   ...
+ *   $template->appendBodyTemplate($ajaxSelect->show());
+ *
+ * To add a close button to the footer:
+ *
+ *    $dialog->getButtonList()->append(\Tk\Ui\Button::createButton('Close')->setAttr('data-dismiss', 'modal'));
+ *
+ * Launch Button:
+ *
+ *    <a href="#" data-toggle="modal" data-target="#{id}"><i class="fa fa-info-circle"></i> {title}</a>
+ *
+ *    $template->setAttr('modelBtn', 'data-toggle', 'modal');
+ *    $template->setAttr('modelBtn', 'data-target', '#'.$ajaxSelect->getId());
+ *
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -92,7 +127,7 @@ class AjaxSelect extends Dialog
 
     /**
      *
-     * Callable: function(\Tk\Request $request) {}
+     * Callable: function(\Tk\Request $request) : array|object {}
      *
      * @param callable $onAjax
      * @return $this
