@@ -385,7 +385,7 @@ class Item extends \Tk\Ui\Element
      */
     public function show()
     {
-        $template = parent::show();
+        $template = $this->getTemplate();
         if (!$this->isVisible()) {
             return $template;
         }
@@ -403,6 +403,8 @@ class Item extends \Tk\Ui\Element
                 $template->appendTemplate($this->getVar(), $this->getLink()->getRightIcon()->show());
             }
         }
+
+        $template = parent::show();
 
         $template->addCss($this->getVar(), $this->getCssList());
         $template->setAttr($this->getVar(), $this->getAttrList());
