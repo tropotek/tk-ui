@@ -82,10 +82,10 @@ class AjaxSelect extends Dialog
      */
     public function __construct($title, $ajaxUrl = null, $dialogId = '')
     {
-        parent::__construct($title, $dialogId);
         $this->ajaxUrl = \Tk\Uri::create()->set('ajaxSelect', $this->getId());
+        parent::__construct($title, $dialogId);
         if ($ajaxUrl)
-            $this->ajaxUrl = \Tk\Uri::create($ajaxUrl);
+            $this->setAjaxUrl(\Tk\Uri::create($ajaxUrl));
         $this->addCss('tk-dialog-ajax-select');
     }
 
@@ -106,6 +106,24 @@ class AjaxSelect extends Dialog
     public function setAjaxParams($params)
     {
         $this->ajaxParams = $params;
+        return $this;
+    }
+
+    /**
+     * @return \Tk\Uri
+     */
+    public function getAjaxUrl(): \Tk\Uri
+    {
+        return $this->ajaxUrl;
+    }
+
+    /**
+     * @param \Tk\Uri|string $ajaxUrl
+     * @return AjaxSelect
+     */
+    public function setAjaxUrl($ajaxUrl): AjaxSelect
+    {
+        $this->ajaxUrl = \Tk\Uri::create($ajaxUrl);
         return $this;
     }
 
