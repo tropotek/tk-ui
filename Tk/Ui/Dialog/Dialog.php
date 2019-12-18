@@ -1,6 +1,9 @@
 <?php
 namespace Tk\Ui\Dialog;
 
+use Tk\ConfigTrait;
+use Tk\Dom\AttributesTrait;
+use Tk\Dom\CssTrait;
 use Tk\Ui\ButtonCollection;
 
 /**
@@ -36,8 +39,9 @@ use Tk\Ui\ButtonCollection;
  */
 class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
-    use \Tk\Dom\AttributesTrait;
-    use \Tk\Dom\CssTrait;
+    use AttributesTrait;
+    use CssTrait;
+    use ConfigTrait;
 
     /**
      * @var string
@@ -356,11 +360,4 @@ HTML;
         return $hash;
     }
 
-    /**
-     * @return \Tk\Config|\App\Config
-     */
-    public function getConfig()
-    {
-        return \Tk\Config::getInstance();
-    }
 }

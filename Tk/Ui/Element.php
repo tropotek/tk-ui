@@ -2,6 +2,10 @@
 namespace Tk\Ui;
 
 
+use Tk\ConfigTrait;
+use Tk\Dom\AttributesTrait;
+use Tk\Dom\CssTrait;
+
 /**
  * Use this interface for all button UI objects
  *
@@ -11,8 +15,9 @@ namespace Tk\Ui;
  */
 abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
-    use \Tk\Dom\AttributesTrait;
-    use \Tk\Dom\CssTrait;
+    use AttributesTrait;
+    use CssTrait;
+    use ConfigTrait;
 
     /**
      * @var int
