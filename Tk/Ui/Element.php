@@ -25,9 +25,9 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
     protected static $idx = 0;
 
     /**
-     * @var int
+     * @var string
      */
-    protected $id = 0;
+    protected $id = '';
 
     /**
      * @var boolean
@@ -66,7 +66,7 @@ abstract class Element extends \Dom\Renderer\Renderer implements \Dom\Renderer\D
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId()
     {
