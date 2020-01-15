@@ -36,7 +36,7 @@ trait ElementCollectionTrait
     /**
      * @param Element $element
      * @param null|Element $refElement
-     * @return mixed
+     * @return Element
      */
     public function append($element, $refElement = null)
     {
@@ -59,7 +59,7 @@ trait ElementCollectionTrait
     /**
      * @param Element $element
      * @param null|Element $refElement
-     * @return mixed
+     * @return Element
      */
     public function prepend($element, $refElement = null)
     {
