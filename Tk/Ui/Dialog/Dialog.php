@@ -169,7 +169,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      * @param string $name
      * @param array $attributes
      * @param string $icon
-     * @return \Tk\Ui\Button
+     * @return \Tk\Ui\Button|\Tk\Ui\Element
      */
     public function addButton($name, $attributes = array(), $icon = '')
     {

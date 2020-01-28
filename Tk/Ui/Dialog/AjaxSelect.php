@@ -195,7 +195,6 @@ class AjaxSelect extends Dialog
     {
         parent::execute($request);
 
-
         if (is_callable($this->onAjax)) {
             if ($request->get('ajaxSelect') == $this->getId()) {
                 $data = call_user_func_array($this->onAjax, array($request));
