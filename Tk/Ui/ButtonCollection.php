@@ -14,13 +14,6 @@ class ButtonCollection extends Element
     use ElementCollectionTrait;
 
 
-    /**
-     * constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * @param array $buttons

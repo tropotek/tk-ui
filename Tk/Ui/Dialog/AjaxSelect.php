@@ -2,6 +2,8 @@
 namespace Tk\Ui\Dialog;
 
 
+use Tk\Callback;
+
 /**
  * To create the dialog:
  *
@@ -45,12 +47,12 @@ namespace Tk\Ui\Dialog;
 class AjaxSelect extends Dialog
 {
     /**
-     * @var null|callable
+     * @var Callback
      */
     protected $onSelect = null;
 
     /**
-     * @var null|callable
+     * @var Callback
      */
     protected $onAjax = null;
 
@@ -82,6 +84,8 @@ class AjaxSelect extends Dialog
      */
     public function __construct($title, $ajaxUrl = null, $dialogId = '')
     {
+        $this->onSelect = Callback::create();
+        $this->onAjax = Callback::create();
         $this->ajaxUrl = \Tk\Uri::create()->set('ajaxSelect', $this->getId());
         parent::__construct($title, $dialogId);
         if ($ajaxUrl)
@@ -128,34 +132,70 @@ class AjaxSelect extends Dialog
     }
 
     /**
-     *
-     * Callable: function(\Tk\Request $request) {}
+     * @return Callback
+     */
+    public function getOnSelect()
+    {
+        return $this->onSelect;
+    }
+
+    /**
+     * Callable: function($dialog) {}
      *
      * @param callable $onSelect
      * @return $this
-     * @throws \Tk\Exception
+     * @deprecated Use $this->addOnSelect($callable,$priority)
      */
     public function setOnSelect($onSelect)
     {
-        if (!is_callable($onSelect))
-            throw new \Tk\Exception('Invalid callable object given');
-        $this->onSelect = $onSelect;
+        $this->addOnSelect($onSelect);
         return $this;
     }
 
     /**
+     * Callable: function($dialog) {}
      *
+     * @param callable $callable
+     * @param int $priority
+     * @return $this
+     */
+    public function addOnSelect($callable, $priority = Callback::DEFAULT_PRIORITY)
+    {
+        $this->getOnSelect()->append($callable, $priority);
+        return $this;
+    }
+
+    /**
+     * @return Callback
+     */
+    public function getOnAjax()
+    {
+        return $this->onAjax;
+    }
+
+    /**
      * Callable: function(\Tk\Request $request) : array|object {}
      *
      * @param callable $onAjax
      * @return $this
-     * @throws \Tk\Exception
+     * @deprecated use $this->addOnAjax($callable, $priority)
      */
     public function setOnAjax($onAjax)
     {
-        if (!is_callable($onAjax))
-            throw new \Tk\Exception('Invalid callable object given');
-        $this->onAjax = $onAjax;
+        $this->addOnAjax($onAjax);
+        return $this;
+    }
+
+    /**
+     * Callable: function($dialog) {}
+     *
+     * @param callable $callable
+     * @param int $priority
+     * @return $this
+     */
+    public function addOnAjax($callable, $priority = Callback::DEFAULT_PRIORITY)
+    {
+        $this->getOnAjax()->append($callable, $priority);
         return $this;
     }
 
@@ -182,39 +222,45 @@ class AjaxSelect extends Dialog
      */
     public function getData()
     {
+        $this->data = $this->getRequest()->all();
         return $this->data;
     }
 
     /**
-     * Process the enrolments as submitted from the dialog
-     *
-     * @param \Tk\Request $request
-     * @throws \Exception
+     * @return array
      */
-    public function execute(\Tk\Request $request)
+    public function getAjaxParams()
     {
-        parent::execute($request);
+        return $this->ajaxParams;
+    }
 
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
 
-        if (is_callable($this->onAjax)) {
-            if ($request->get('ajaxSelect') == $this->getId()) {
-                $data = call_user_func_array($this->onAjax, array($request));
-                \Tk\ResponseJson::createJson($data)->send();
-                exit();
-            }
+    /**
+     *
+     */
+    public function execute()
+    {
+        parent::execute();
+
+        if ($this->getRequest()->get('ajaxSelect') == $this->getId()) {
+            $data = $this->getOnAjax()->execute($this);
+            \Tk\ResponseJson::createJson($data)->send();
+            exit();
         }
 
-        $eventId = $this->getSelectButtonId();
         // Fire the callback if set
-        if ($request->has($eventId)) {
-            $this->data = $request->all();
+        if ($this->getRequest()->has($this->getSelectButtonId())) {
             $redirect = \Tk\Uri::create();
-            if (is_callable($this->onSelect)) {
-                $url = call_user_func_array($this->onSelect, array($request));
-                //$url = call_user_func_array($this->onSelect, array($this->data));
-                if ($url instanceof \Tk\Uri) {
-                    $redirect = $url;
-                }
+            $url = $this->getOnSelect()->execute($this);
+            if ($url instanceof \Tk\Uri) {
+                $redirect = $url;
             }
             $redirect->remove($this->getSelectButtonId())->remove($this->getSelectButtonId())->remove('selectedId')->redirect();
         }
@@ -228,20 +274,18 @@ class AjaxSelect extends Dialog
         /** @var \Dom\Template $selectTemplate */
         $selectTemplate = $this->__makeSelectTemplate();
 
-        if ($this->notes) {
-            $selectTemplate->insertHtml('notes', $this->notes);
+        if ($this->getNotes()) {
+            $selectTemplate->insertHtml('notes', $this->getNotes());
             $selectTemplate->setVisible('notes');
         }
-        $ajaxParams = json_encode($this->ajaxParams,\JSON_FORCE_OBJECT);
+        $ajaxParams = json_encode($this->getAjaxParams(),\JSON_FORCE_OBJECT);
         $this->setAttr('data-ajax-params', $ajaxParams);
 
         // deprecated use onAjax callback
-        $ajaxUrl = $this->ajaxUrl->toString();
+        $ajaxUrl = $this->getAjaxUrl()->toString();
         $actionUrl = \Tk\Uri::create()->set($this->getSelectButtonId())->toString();
         $this->setAttr('data-ajax-url', $ajaxUrl);
         $this->setAttr('data-action-url', $actionUrl);
-
-
 
         $js = <<<JS
 jQuery(function($) {
@@ -332,7 +376,6 @@ jQuery(function($) {
 });
 JS;
         $selectTemplate->appendJs($js);
-
 
         $template = parent::show();
         $template->appendTemplate('content', $selectTemplate);

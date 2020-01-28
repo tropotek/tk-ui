@@ -98,11 +98,11 @@ class Form extends Dialog
     /**
      * @param \Tk\Request $request
      */
-    public function execute(\Tk\Request $request)
+    public function execute()
     {
-        parent::execute($request);
+        parent::execute();
         if (!$this->getForm()->hasErrors()) {
-            $this->getForm()->execute($request);
+            $this->getForm()->execute($this->getRequest());
         }
     }
 
