@@ -2,8 +2,12 @@
     "name": "ttek/tk-ui",
     "type": "library",
     "description": "A bootstrap based UI lib for the Tk-lib framework",
-    "keywords":  ["tropotek", "UI", "Bootstrap"],
-    "time": "2019-04-09",
+    "keywords":  [
+        "tropotek",
+        "UI",
+        "Bootstrap"
+    ],
+    "time": "2020-01-29",
     "license": "MIT",
     "authors":  [
          {
@@ -24,5 +28,6 @@
         "branch-alias":  {
             "dev-master": "3.0.x-dev"
         }
-    }
+    },
+    "version": "3.0.36"
 }
