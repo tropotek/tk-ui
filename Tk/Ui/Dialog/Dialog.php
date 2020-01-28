@@ -1,6 +1,7 @@
 <?php
 namespace Tk\Ui\Dialog;
 
+use Tk\Callback;
 use Tk\ConfigTrait;
 use Tk\Dom\AttributesTrait;
 use Tk\Dom\CssTrait;
@@ -74,17 +75,17 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     protected $content = '';
 
     /**
-     * @var null|callable
+     * @var Callback
      */
     protected $onInit = null;
 
     /**
-     * @var null|callable
+     * @var Callback
      */
     protected $onExecute = null;
 
     /**
-     * @var null|callable
+     * @var Callback
      */
     protected $onShow = null;
 
@@ -95,6 +96,9 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      */
     public function __construct($title, $dialogId = '')
     {
+        $this->onInit = Callback::create();
+        $this->onExecute = Callback::create();
+        $this->onShow = Callback::create();
         $this->id = $dialogId;
         if (!$this->id)
             $this->id = $this->makeIdHash($title);
@@ -237,56 +241,121 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     }
 
     /**
+     * @return Callback
+     */
+    public function getOnInit()
+    {
+        return $this->onInit;
+    }
+
+    /**
      * @param callable|null $onInit
      * @return $this
-     * @throws \Tk\Exception
+     * @deprecated use $this->addOnInit($callable, $priority)
      */
     public function setOnInit($onInit)
     {
-        if (!is_callable($onInit))
-            throw new \Tk\Exception('Invalid callable object given');
-        $this->onInit = $onInit;
+        $this->addOnInit($onInit);
         return $this;
+    }
+
+    /**
+     * function ($dialog) {}
+     *
+     * @param callable $callable
+     * @param int $priority
+     * @return $this
+     */
+    public function addOnInit($callable, $priority = Callback::DEFAULT_PRIORITY)
+    {
+        $this->getOnInit()->append($callable, $priority);
+        return $this;
+    }
+
+    /**
+     * @return Callback
+     */
+    public function getOnExecute()
+    {
+        return $this->onExecute;
     }
 
     /**
      * @param callable|null $onExecute
      * @return $this
-     * @throws \Tk\Exception
+     * @deprecated use $this->addOnExecute($callable, $priority)
      */
     public function setOnExecute($onExecute)
     {
-        if (!is_callable($onExecute))
-            throw new \Tk\Exception('Invalid callable object given');
-        $this->onExecute = $onExecute;
+        $this->addOnExecute($onExecute);
         return $this;
+    }
+
+    /**
+     * function ($dialog) {}
+     *
+     * @param callable $callable
+     * @param int $priority
+     * @return $this
+     */
+    public function addOnExecute($callable, $priority = Callback::DEFAULT_PRIORITY)
+    {
+        $this->getOnExecute()->append($callable, $priority);
+        return $this;
+    }
+
+    /**
+     * @return Callback
+     */
+    public function getOnShow()
+    {
+        return $this->onShow;
     }
 
     /**
      * @param callable|null $onShow
      * @return $this
-     * @throws \Tk\Exception
      */
     public function setOnShow($onShow)
     {
-        if (!is_callable($onShow))
-            throw new \Tk\Exception('Invalid callable object given');
-        $this->onShow = $onShow;
+        $this->addOnShow($onShow);
         return $this;
     }
 
-    public function init()
+    /**
+     * function ($dialog) {}
+     *
+     * @param callable $callable
+     * @param int $priority
+     * @return $this
+     */
+    public function addOnShow($callable, $priority = Callback::DEFAULT_PRIORITY)
     {
-        if (is_callable($this->onInit)) {
-            call_user_func_array($this->onInit, array($this));
-        }
+        $this->getOnShow()->append($callable, $priority);
+        return $this;
     }
 
-    public function execute(\Tk\Request $request)
+
+    /**
+     *
+     */
+    public function init()
     {
-        if (is_callable($this->onExecute)) {
-            call_user_func_array($this->onExecute, array($request, $this));
-        }
+        $this->getOnInit()->execute($this);
+//        if (is_callable($this->onInit)) {
+//            call_user_func_array($this->onInit, array($this));
+//        }
+    }
+
+    /**
+     *
+     */
+    public function execute()
+    {
+        $this->getOnExecute()->execute($this);
+//        if (is_callable($this->onExecute)) {
+//            call_user_func_array($this->onExecute, array($request, $this));
+//        }
     }
 
     /**
@@ -295,9 +364,10 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     public function show()
     {
         $template = $this->getTemplate();
-        if (is_callable($this->onShow)) {
-            call_user_func_array($this->onShow, array($this));
-        }
+        $this->getOnShow()->execute($this);
+//        if (is_callable($this->onShow)) {
+//            call_user_func_array($this->onShow, array($this));
+//        }
 
         $template->appendTemplate('footer', $this->buttonList->show());
         $template->insertText('title', $this->getTitle());
