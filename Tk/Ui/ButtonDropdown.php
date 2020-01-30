@@ -42,7 +42,7 @@ class ButtonDropdown extends ButtonCollection
         $obj->setText($text);
         $obj->setIcon($icon);
         foreach ($links as $l) {
-            $obj->add($l);
+            $obj->append($l);
         }
         return $obj;
     }
