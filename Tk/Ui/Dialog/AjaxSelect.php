@@ -86,8 +86,8 @@ class AjaxSelect extends Dialog
     {
         $this->onSelect = Callback::create();
         $this->onAjax = Callback::create();
-        $this->ajaxUrl = \Tk\Uri::create()->set('ajaxSelect', $this->getId());
         parent::__construct($title, $dialogId);
+        $this->ajaxUrl = \Tk\Uri::create()->set('ajaxSelect', $this->getId());
         if ($ajaxUrl)
             $this->setAjaxUrl(\Tk\Uri::create($ajaxUrl));
         $this->addCss('tk-dialog-ajax-select');
@@ -290,17 +290,17 @@ class AjaxSelect extends Dialog
 
         $js = <<<JS
 jQuery(function($) {
-  
+
   $('.tk-dialog-ajax-select').each(function () {
     var dialog = $(this);
     var settings = $.extend({}, {
         selectParam : 'id'
       }, dialog.data());
-    
+
     var launchBtn = null;
     var launchData = {};
     processing(false);
-    
+
     dialog.find('.btn-search').click(function(e) {
       processing(true);
       if (dialog.find('.input-search').val())
@@ -312,7 +312,7 @@ jQuery(function($) {
         processing(false);
       });
     });
-  
+
     function buildTable(data) {
       if (data.length === 0) {
         return $('<p class="text-center" style="margin-top: 10px;font-weight: bold;font-style: italic;">No Data Found!</p>');
@@ -328,16 +328,19 @@ jQuery(function($) {
           href += '&' + $.param(launchData);
         }
         row.find('.cell-name-url').text(obj.name).attr('href', href).on('click', function (e) {
-          $(this).on('click', function() {return false;});
+          if (dialog.data('itemOnClick')) {
+            return dialog.data('itemOnClick').apply(this, dialog);
+          }
+          //$(this).on('click', function() {return false;});
         });
         //row.find('.cell-id').text(obj.id);
         table.find('tr.data-tpl').after(row);
       });
       table.find('tr.data-tpl').remove();
-      
+
       return table;
     }
-    
+
     function processing(bool) {
       if (bool) {
         dialog.find('.form-control-feedback').show();
@@ -351,7 +354,7 @@ jQuery(function($) {
         dialog.find('.cell-name-url').removeClass('disabled');
       }
     }
-    
+
     // Some focus and key logic
     dialog.on('shown.bs.modal', function (e) {
       dialog.find('.input-search').val('').focus();
@@ -364,16 +367,16 @@ jQuery(function($) {
       });
       dialog.find('.btn-search').click();
     });
-    
+
     dialog.find('.input-search').on('keyup', function(e) {
       var code = (e.keyCode ? e.keyCode : e.which);
       if(code === 13) { //Enter keycode
           dialog.find('.btn-search').click();
-      }    
+      }
     });
-    
+
   });
-  
+
 });
 JS;
         $selectTemplate->appendJs($js);
@@ -403,7 +406,7 @@ JS;
       </span>
     </div><!-- /input-group -->
   </div>
-  
+
   <div class="col-md-12" >
     <div class="dialog-table" style="min-height: 100px;"></div>
   </div>

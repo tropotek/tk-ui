@@ -31,7 +31,6 @@ class Button extends Element
     protected $rightIcon = null;
 
 
-
     /**
      * @param string $text
      * @param string|Icon $icon
