@@ -9,12 +9,12 @@ use Tk\Callback;
  *
  *   $ajaxSelect = \Tk\Ui|AjaxSelect::create('Select Module For New Entry');
  *   $ajaxSelect->setNotes('Select the module to create the new assessment entry for.');
- *   $ajaxSelect->setOnAjax(function (\Tk\Request $request) {
+ *   $ajaxSelect->setOnAjax(function ($dialog) {
  *   $config = \App\Config::getInstance();
  *       $filter = array();
  *       return \App\Db\ObjectMap::create()->findFiltered($filter, \Tk\Db\Tool::create())->toArray();
  *   });
- *   $ajaxSelect->setOnSelect(function (\Tk\Request $request) {
+ *   $ajaxSelect->setOnSelect(function ($dialog) {
  *       $config = \App\Config::getInstance();
  *       $selectedId = (int)$request->get('selectedId');
  *       $obj = \App\Db\ObjectMap::create()->find($selectedId);
