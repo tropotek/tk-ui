@@ -115,6 +115,7 @@ class ButtonDropdown extends ButtonCollection
             return $template;
         }
 
+
         $space = '';
         if ($this->getIcon()) $space = ' ';
         if ($this->getText()) {
@@ -140,6 +141,15 @@ class ButtonDropdown extends ButtonCollection
             $template->setAttr('btn', $this->getAttrList());
             $template->setVisible('dropdown', false);
         } else {
+
+            if ($this->hasAttr('data-confirm')) {
+                /** @var $btn Link */
+                foreach ($this->elementList as $link) {
+                    $link->setAttr('data-confirm', $this->getAttr('data-confirm'));
+                }
+                $this->removeAttr('data-confirm');
+            }
+
             /** @var $btn Link */
             foreach ($this->elementList as $link) {
                 $item = $template->getRepeat('item');
