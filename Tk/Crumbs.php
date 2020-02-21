@@ -15,6 +15,8 @@ namespace Tk;
  */
 class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
+    use ConfigTrait;
+
     /**
      * Request param: Reset the crumb stack
      */
@@ -104,7 +106,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      */
     public function reset()
     {
-        if (!\Tk\Config::getInstance()->getRequest()->has(self::CRUMB_IGNORE)) {
+        if (!$this->getRequest()->has(self::CRUMB_IGNORE)) {
             $homeTitle = self::$homeTitle;
             $url = \Tk\Uri::create(self::$homeUrl);
             $this->getSession()->remove($this->getSid());
@@ -118,7 +120,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
 //    public static function reset($homeTitle = 'Dashboard', $url = null)
 //    {
 //        $crumbs = self::getInstance();
-//        if ($crumbs && !\Tk\Config::getInstance()->getRequest()->has(self::CRUMB_IGNORE)) {
+//        if ($crumbs && !$this->getRequest()->has(self::CRUMB_IGNORE)) {
 //            if (!$url) {
 //                $homeTitle = self::$homeTitle;
 //                $url = \Tk\Uri::create(self::$homeUrl);
