@@ -98,9 +98,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         return self::$instance;
     }
 
-
-
-
     /**
      * @return $this
      */
