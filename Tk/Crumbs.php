@@ -27,17 +27,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     const CRUMB_IGNORE = 'crumb_ignore';
 
     /**
-     * @var string
-     */
-    public static $homeUrl = '/index.html';
-
-    /**
-     * @var string
-     */
-    public static $homeTitle = 'Home';
-
-
-    /**
      * @var Crumbs
      */
     public static $instance = null;
@@ -48,50 +37,56 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     protected $list = array();
 
     /**
-     * @var \Tk\Session
-     */
-    protected $session = null;
-
-    /**
      * @var boolean
      */
     protected $visible = true;
 
+    /**
+     * @var string
+     */
+    protected $homeTitle = 'Dashboard';
 
     /**
-     * @param \Tk\Session $session
+     * @var string
      */
-    protected function __construct($session)
+    protected $homeUrl = '/index.html';
+
+
+    /**
+     * @param string $homeUrl
+     * @param string $homeTitle
+     */
+    protected function __construct($homeUrl = '/index.html', $homeTitle = 'Dashboard')
     {
-        $this->session = $session;
+        $this->homeUrl = $homeUrl;
+        $this->homeTitle = $homeTitle;
     }
 
     /**
-     * @param \Tk\Session $session
+     * @param string $homeUrl
+     * @param string $homeTitle
      * @return static
      */
-    static protected function create($session)
+    static protected function create($homeUrl = '/index.html', $homeTitle = 'Dashboard')
     {
-        $obj = new static($session);
+        $obj = new static($homeUrl, $homeTitle);
         return $obj;
     }
 
     /**
-     * @param null|\Tk\Session $session
+     * @param string $homeUrl
+     * @param string $homeTitle
      * @return Crumbs
      */
-    public static function getInstance($session = null)
+    public static function getInstance($homeUrl = '/index.html', $homeTitle = 'Dashboard')
     {
-        if (!$session)
-            $session = \Tk\Config::getInstance()->getSession();
-
         if (!self::$instance) {
-            $crumbs = self::create($session);
-            if ($session->has($crumbs->getSid())) {
-                $crumbs->setList($session->get($crumbs->getSid()));
+            $crumbs = self::create($homeUrl, $homeTitle);
+            if ($crumbs->getSession()->has($crumbs->getSid())) {
+                $crumbs->setList($crumbs->getSession()->get($crumbs->getSid()));
             }
             if (!count($crumbs->getList())) {
-                $crumbs->addCrumb(self::$homeTitle, \Tk\Uri::create(self::$homeUrl));
+                $crumbs->addCrumb($crumbs->getHomeTitle(), $crumbs->getHomeUrl());
             }
             self::$instance = $crumbs;
         }
@@ -104,32 +99,13 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     public function reset()
     {
         if (!$this->getRequest()->has(self::CRUMB_IGNORE)) {
-            $homeTitle = self::$homeTitle;
-            $url = \Tk\Uri::create(self::$homeUrl);
             $this->getSession()->remove($this->getSid());
             $this->setList();
-            $this->addCrumb($homeTitle, $url);
+            $this->addCrumb($this->getHomeTitle(), $this->getHomeUrl());
             $this->save();
         }
         return $this;
     }
-
-//    public static function reset($homeTitle = 'Dashboard', $url = null)
-//    {
-//        $crumbs = self::getInstance();
-//        if ($crumbs && !$this->getRequest()->has(self::CRUMB_IGNORE)) {
-//            if (!$url) {
-//                $homeTitle = self::$homeTitle;
-//                $url = \Tk\Uri::create(self::$homeUrl);
-//            }
-//            $crumbs->getSession()->remove($crumbs->getSid());
-//            $crumbs->setList();
-//            $crumbs->addCrumb($homeTitle, $url);
-//            $crumbs->save();
-//            return $crumbs;
-//        }
-//    }
-
 
     /**
      * save the state of the crumb stack to the session
@@ -146,15 +122,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      */
     public function getSid()
     {
-        return 'crumbs.' . self::$homeUrl;
-    }
-
-    /**
-     * @return \Tk\Session
-     */
-    public function getSession()
-    {
-        return $this->session;
+        return 'crumbs.' . $this->getHomeUrl();
     }
 
     /**
@@ -167,10 +135,12 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
 
     /**
      * @param bool $visible
+     * @return Crumbs
      */
     public function setVisible($visible)
     {
         $this->visible = $visible;
+        return $this;
     }
 
     /**
@@ -184,17 +154,35 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
     }
 
     /**
+     * @return string
+     */
+    public function getHomeTitle(): string
+    {
+        return $this->homeTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomeUrl(): string
+    {
+        return $this->homeUrl;
+    }
+
+    /**
      * Use to restore crumb list.
      * format:
      *   array(
      *     'Page Name' => '/page/url/pageUrl.html'
      *   );
      *
-     * @param $list
+     * @param array $list
+     * @return Crumbs
      */
     public function setList($list = array())
     {
         $this->list = $list;
+        return $this;
     }
 
     /**
