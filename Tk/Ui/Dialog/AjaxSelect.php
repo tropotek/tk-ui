@@ -166,6 +166,16 @@ class AjaxSelect extends Dialog
     }
 
     /**
+     * @return null|string
+     */
+    public function getSelectedId()
+    {
+        if ($this->getRequest()->has('selectedId'))
+            return $this->getRequest()->get('selectedId');
+        return '';
+    }
+
+    /**
      * @return Callback
      */
     public function getOnAjax()
@@ -175,6 +185,11 @@ class AjaxSelect extends Dialog
 
     /**
      * Callable: function(\Tk\Request $request) : array|object {}
+     * Return the list of items in the form of:
+     *   array(
+     *     'id' => {int},
+     *     'name' => {string}
+     *   )
      *
      * @param callable $onAjax
      * @return $this
