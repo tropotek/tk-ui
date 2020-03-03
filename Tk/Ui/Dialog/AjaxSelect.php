@@ -411,8 +411,8 @@ JS;
 <div class="row">
   <div class="col-md-12">
     <p var="notes" choice="notes"></p>
-    <div class="input-group has-feedback has-feedback-left">
-      <input type="text" placeholder="Search by keyword ..." class="form-control input-sm input-search"/>
+    <div class="input-group">
+      <input type="text" placeholder="Search by keyword ..." name="keywords" class="form-control input-sm input-search"/>
       <div class="form-control-feedback" style="">
         <i class="fa fa-spinner fa-spin"></i>
       </div>
