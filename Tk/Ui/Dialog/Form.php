@@ -113,14 +113,18 @@ class Form extends Dialog
     public function setForm(\Tk\Form $form)
     {
         $this->form = $form;
-        if ($this->form->getField('cancel')) {
-            $this->form->getField('cancel')->addCss('float-right')->setAttr('data-dismiss', 'modal');
-        }
-        if ($this->form->getField('save')) {
-            $this->form->getField('save')->addCss('float-right')->setIconLeft('')->setIconRight('fa fa-arrow-right');
-        }
-        if ($this->form->getField('update')) {
-            $this->form->removeField('update');
+        if (!$this->form->getField('cancel')->hasAttr('data-dismiss')) {
+            // NOTE: if there is no attribute it is ASSUMED that the form submit buttons need to be updated
+            //       for the form to be submitted within a dialog.
+            if ($this->form->getField('cancel')) {
+                $this->form->getField('cancel')->addCss('float-right')->setAttr('data-dismiss', 'modal');
+            }
+            if ($this->form->getField('save')) {
+                $this->form->getField('save')->addCss('float-right')->setIconLeft('')->setIconRight('fa fa-arrow-right');
+            }
+            if ($this->form->getField('update')) {
+                $this->form->removeField('update');
+            }
         }
         return $this;
     }
