@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 3.0.52 [2020-05-08]:
+-------------------------------
+  - Added new placement table action to change status of bulk placements
+
+
 Ver 3.0.50 [2020-03-09]:
 -------------------------------
 
