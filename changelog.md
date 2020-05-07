@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 3.0.54 [2020-05-08]:
+-------------------------------
+  - Fixed bug with dialog form from placement batch status release
+
+
 Ver 3.0.52 [2020-05-08]:
 -------------------------------
   - Added new placement table action to change status of bulk placements
