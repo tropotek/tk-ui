@@ -15,7 +15,7 @@ class Form extends Dialog
     protected $form = null;
 
     /**
-     * Should we try to submit the form via javascript
+     * Should submit the form via javascript
      * @var bool
      */
     protected $jsSubmit = true;
