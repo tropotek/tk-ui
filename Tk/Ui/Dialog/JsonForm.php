@@ -56,7 +56,7 @@ class JsonForm extends Dialog
      * @param string $dialogId
      * @return static
      */
-    public static function createFormDialog($form, $title, $dialogId = '')
+    public static function createJsonForm($form, $title, $dialogId = '')
     {
         $obj = new static($form, $title, $dialogId);
         return $obj;
@@ -196,8 +196,10 @@ jQuery(function ($) {
       e.preventDefault();  // prevent form from submitting
       var f = $(this);
       var saveBtn = f.find('#'+f.attr('id')+'-save');
-      // Add save event to request
-      f.append('<input type="hidden" name="'+saveBtn.attr('name')+'" value="'+saveBtn.attr('value')+'" />');
+      // Add save event to request if not already there
+      if (f.find('input[type="hidden"][name="'+saveBtn.attr('name')+'"]').length === 0) {
+        f.append('<input type="hidden" name="'+saveBtn.attr('name')+'" value="'+saveBtn.attr('value')+'" />');        
+      }
       // clear any errors
       clearErrors();
       
