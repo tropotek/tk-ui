@@ -136,21 +136,24 @@ class JsonForm extends Dialog
                 $this->form->removeField('update');
             }
         }
-        if ($this->form instanceof \Bs\FormIface) {
-            if ($this->form->getField('save')) {
-                $this->form->getField('save')
-                    ->appendCallback(function (\Bs\FormIface $form, \Tk\Form\Event\Iface $event) {
+
+        if ($this->form->getField('save')) {
+            $this->form->getField('save')
+                ->appendCallback(function (\Tk\Form $form, \Tk\Form\Event\Iface $event) {
+                    $res = \Tk\ResponseJson::createJson($form->getValues());
+                    if ($this->form instanceof \Bs\FormIface)
                         $res = \Tk\ResponseJson::createJson($form->getModel());
-                        if ($form->hasErrors()) {
-                            $errors = $form->getAllErrors();
-                            $res = \Tk\ResponseJson::createJson($errors, \Tk\Response::HTTP_INTERNAL_SERVER_ERROR);
-                        }
-                        \Tk\Alert::clear();
-                        $res->send();
-                        exit;
-                    });
-            }
+
+                    if ($form->hasErrors()) {
+                        $errors = json_encode($form->getAllErrors(), \JSON_FORCE_OBJECT);
+                        $res = \Tk\ResponseJson::createJson($errors, \Tk\Response::HTTP_INTERNAL_SERVER_ERROR);
+                    }
+                    \Tk\Alert::clear();
+                    $res->send();
+                    exit;
+                });
         }
+
         return $this;
     }
 
@@ -192,6 +195,8 @@ jQuery(function ($) {
       }
     };
     
+    function isObject(A) {  return A === null || (A && A.toString() === "[object Object]"); };
+    
     form.on('submit', function (e) {
       e.preventDefault();  // prevent form from submitting
       var f = $(this);
@@ -217,10 +222,23 @@ jQuery(function ($) {
           dialog.modal('hide');
         }).fail(function(xhr) {
           // post any errors
+          var errHtml = '<p>Errors:</p><ul>';
+          var errMsg = 'Errors:\\n';
           $.each(xhr.responseJSON, function(k, v) {
             dialog.find('[name='+k+']').closest('.form-group').addClass('has-error');
+            if (isObject(v)) {
+              $.each(v,  function (i, j) { 
+                errHtml += '<li>'+j+'</li>';
+                errMsg += '\\t'+j+'\\n';
+              });
+            } else {
+              errHtml += '<li>'+v+'</li>';
+              errMsg += '\\t'+v+'\\n';
+            }
           });
-          dialog.trigger('DialogForm:error', [xhr]);
+          errHtml += '</ul>';
+          errMsg += '\\n';
+          dialog.trigger('DialogForm:error', [xhr, errMsg, errHtml]);
           showAlert();
         });
       }
@@ -230,15 +248,16 @@ jQuery(function ($) {
         
     dialog.on('hidden.bs.modal', function () {
       clearErrors();  // clear any errors
-      fields.val(''); // Clear the form
     });
     
     dialog.on('shown.bs.modal', function () {
       fields.first().focus();
     });
     
-    if (dialog.data('resetOnHide')) {
+    
+    if (dialog.data('resetOnHide') !== undefined && dialog.data('resetOnHide') === 'true') {
       dialog.on('hidden.bs.modal', function () {
+        fields.val(''); // Clear the form here, as i causes unwanted issues anywhere else
         fields.first().closest('form').trigger('reset'); // Note does not reset file fields
       });
     }
