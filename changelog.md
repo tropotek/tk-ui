@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 3.0.56 [2020-10-19]:
+-------------------------------
+  - Added a form dialog field to TK lib
+
+
 Ver 3.0.54 [2020-05-08]:
 -------------------------------
   - Fixed bug with dialog form from placement batch status release
