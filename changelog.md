@@ -1,5 +1,18 @@
 #CHANGELOG#
 
+Ver 3.0.62 [2020-11-23]:
+-------------------------------
+  - Tagging and releasing branch `3.0` with version `3.0.58`.
+  - Tagging and releasing branch `3.0` with version `3.0.56`.
+  - Added a form dialog field to TK lib
+  - Tagging and releasing branch `3.0` with version `3.0.54`.
+  - Fixed bug with dialog form from placement batch status release
+  - Tagging and releasing branch `3.0` with version `3.0.52`.
+  - Added new placement table action to change status of bulk placements
+  - Tagging and releasing branch `3.0` with version `3.0.50`.
+  - Tagging and releasing branch `M	Tk/Crumbs.php` with version `3.0.48`.
+
+
 Ver 3.0.58 [2020-10-20]:
 -------------------------------
 
