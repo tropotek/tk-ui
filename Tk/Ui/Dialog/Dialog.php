@@ -89,6 +89,11 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      */
     protected $onShow = null;
 
+    /**
+     * @var int
+     */
+    public static $instanceId = 0;
+
 
     /**
      * @param string $title
@@ -101,7 +106,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         $this->onShow = Callback::create();
         $this->id = $dialogId;
         if (!$this->id)
-            $this->id = $this->makeIdHash($title);
+            $this->id = $this->makeIdHash($title.'-'.self::$instanceId);
         if (!$title)
             $title = ucwords(preg_replace('/[A-Z_-]/', ' $0', $title));
 
@@ -111,6 +116,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         $this->setAttr('id', $this->getId());
         $this->setAttr('aria-labelledby', $this->getId().'-Label');
         $this->getButtonList()->append(\Tk\Ui\Button::createButton('Close')->setAttr('data-dismiss', 'modal'));
+        self::$instanceId++;
     }
 
     /**
