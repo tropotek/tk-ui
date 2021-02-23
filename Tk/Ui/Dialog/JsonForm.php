@@ -143,7 +143,6 @@ class JsonForm extends Dialog
                     $res = \Tk\ResponseJson::createJson($form->getValues());
                     if ($this->form instanceof \Bs\FormIface)
                         $res = \Tk\ResponseJson::createJson($form->getModel());
-
                     if ($form->hasErrors()) {
                         $errors = json_encode($form->getAllErrors(), \JSON_FORCE_OBJECT);
                         $res = \Tk\ResponseJson::createJson($errors, \Tk\Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -220,11 +219,11 @@ jQuery(function ($) {
         $.post(f.attr('action'), f.serialize(), function (data) {
           dialog.trigger('DialogForm:submit', [data]);
           dialog.modal('hide');
-        }).fail(function(xhr) {
+        }, 'json').fail(function(xhr) {
           // post any errors
           var errHtml = '<p>Errors:</p><ul>';
           var errMsg = 'Errors:\\n';
-          $.each(xhr.responseJSON, function(k, v) {
+          $.each(xhr.responseJSON, function(k, v) {            
             dialog.find('[name='+k+']').closest('.form-group').addClass('has-error');
             if (isObject(v)) {
               $.each(v,  function (i, j) { 
