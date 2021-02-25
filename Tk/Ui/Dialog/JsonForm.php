@@ -219,7 +219,7 @@ jQuery(function ($) {
         $.post(f.attr('action'), f.serialize(), function (data) {
           dialog.trigger('DialogForm:submit', [data]);
           dialog.modal('hide');
-        }, 'json').fail(function(xhr) {
+        }).fail(function(xhr) {     // NOTE do not use the specific data type here like 'json' or 'html' or else it wont work
           // post any errors
           var errHtml = '<p>Errors:</p><ul>';
           var errMsg = 'Errors:\\n';
