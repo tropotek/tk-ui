@@ -253,11 +253,12 @@ jQuery(function ($) {
       fields.first().focus();
     });
     
-    
-    if (dialog.data('resetOnHide') !== undefined && dialog.data('resetOnHide') === 'true') {
+    if (dialog.data('resetOnHide') !== undefined && dialog.data('resetOnHide')) {
+       // Clear the form here, as it causes unwanted issues anywhere else
       dialog.on('hidden.bs.modal', function () {
-        fields.val(''); // Clear the form here, as i causes unwanted issues anywhere else
-        fields.first().closest('form').trigger('reset'); // Note does not reset file fields
+        //fields.val('');
+        $(fields.get(0).form).trigger('reset');
+        $('button').blur();
       });
     }
     
