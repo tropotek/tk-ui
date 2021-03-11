@@ -180,6 +180,7 @@ jQuery(function ($) {
       dialog.removeClass('has-error');
       dialog.find('.has-error').removeClass('has-error');
       dialog.find('.foot-error').remove();
+      dialog.find('.dlg-error').remove();
     };
     
     var showAlert = function() {
@@ -190,7 +191,7 @@ jQuery(function ($) {
             'Invalid required fields please try again.' +
           '</div>');
         dialog.find('.modal-footer').prepend(alert);
-        alert.delay(2000).fadeOut('slow');
+        alert.delay(5000).fadeOut('slow');
       }
     };
     
@@ -221,22 +222,29 @@ jQuery(function ($) {
           dialog.modal('hide');
         }).fail(function(xhr) {     // NOTE do not use the specific data type here like 'json' or 'html' or else it wont work
           // post any errors
+          clearErrors();
           var errHtml = '<p>Errors:</p><ul>';
           var errMsg = 'Errors:\\n';
           $.each(xhr.responseJSON, function(k, v) {            
             dialog.find('[name='+k+']').closest('.form-group').addClass('has-error');
+            var errField = '';
             if (isObject(v)) {
               $.each(v,  function (i, j) { 
                 errHtml += '<li>'+j+'</li>';
                 errMsg += '\\t'+j+'\\n';
+                if (i == 0)
+                  errField += j+'';
               });
             } else {
               errHtml += '<li>'+v+'</li>';
               errMsg += '\\t'+v+'\\n';
+              errField += v+'';
             }
+            dialog.find('[name='+k+']').closest('.form-group').append('<small class="text-error dlg-error">'+errField+'</small>');
           });
           errHtml += '</ul>';
           errMsg += '\\n';
+          console.log(xhr);
           dialog.trigger('DialogForm:error', [xhr, errMsg, errHtml]);
           showAlert();
         });
