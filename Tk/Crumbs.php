@@ -1,4 +1,5 @@
 <?php
+
 namespace Tk;
 
 
@@ -193,10 +194,11 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         $url = '';
         if (count($this->list) == 1) {
             $url = end($this->list);
-        } if (count($this->list) > 1) {
-        end($this->list);
-        $url = prev($this->list);
-    }
+        }
+        if (count($this->list) > 1) {
+            end($this->list);
+            $url = prev($this->list);
+        }
         return \Tk\Uri::create($url);
     }
 
@@ -217,7 +219,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      * @param \Tk\Uri|string $url
      * @return $this
      */
-    public function replaceCrumb($title, $url) {
+    public function replaceCrumb($title, $url)
+    {
         array_pop($this->list);
         return $this->addCrumb($title, $url);
     }
@@ -226,7 +229,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      * @param $title
      * @return array
      */
-    public function trimByTitle($title) {
+    public function trimByTitle($title)
+    {
         $l = array();
         foreach ($this->list as $t => $u) {
             if ($title == $t) break;
@@ -241,7 +245,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
      * @param bool $ignoreQuery
      * @return array
      */
-    public function trimByUrl($url, $ignoreQuery = true) {
+    public function trimByUrl($url, $ignoreQuery = true)
+    {
         $url = \Tk\Uri::create($url);
         $l = array();
         foreach ($this->list as $t => $u) {
@@ -271,12 +276,12 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         foreach ($this->list as $title => $url) {
             $repeat = $template->getRepeat('li');
             if (!$repeat) continue;         // ?? why and how does the repeat end up null.
-            if ($i < count($this->list)-1) {
+            if ($i < count($this->list) - 1) {
                 $repeat->setAttr('url', 'href', \Tk\Uri::create($url)->toString());
                 $repeat->insertText('url', $title);
             } else {    // Last item
                 $repeat->insertText('li', $title);
-                $repeat->addCss('li','active');
+                $repeat->addCss('li', 'active');
             }
 
             $repeat->appendRepeat();
