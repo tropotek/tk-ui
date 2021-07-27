@@ -28,9 +28,16 @@ class ListRenderer extends RendererIface
         $menu = $this->getMenu();
         if (!$menu) return $template;
 
-        $menu->addCss($menu->getLink()->getText());
-        if (!$menu->hasAttr('id')) {
-            $menu->setAttr('id', preg_replace('/[^a-z0-9_-]/i', '-', $menu->getLink()->getText()).'-'.$menu->getId());
+        if ($menu->getLink()) {
+            $menu->addCss($menu->getLink()->getText());
+            if (!$menu->hasAttr('id')) {
+                $menu->setAttr('id', preg_replace('/[^a-z0-9_-]/i', '-', $menu->getLink()->getText()) . '-' . $menu->getId());
+            }
+        } else {
+            $menu->addCss($menu->getName());
+            if (!$menu->hasAttr('id')) {
+                $menu->setAttr('id', preg_replace('/[^a-z0-9_-]/i', '-', $menu->getName()) . '-' . $menu->getId());
+            }
         }
 
         $ul = $this->iterate($this->getMenu()->getChildren());

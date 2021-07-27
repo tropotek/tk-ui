@@ -60,7 +60,8 @@ class Item extends \Tk\Ui\Element
     {
         parent::__construct();
         $this->setName($name);
-        $this->setLink(Link::create($name, $url, $icon));
+        if ($url)
+            $this->setLink(Link::create($name, $url, $icon));
     }
 
     /**
@@ -292,6 +293,8 @@ class Item extends \Tk\Ui\Element
      */
     public function findByHref($href, $full = true)
     {
+        if (!$this->getLink()) return null;
+
         $cmp1 = Uri::create($href);
         $cmp2 = Uri::create( $this->getLink());
         if (!$full) {
@@ -317,7 +320,7 @@ class Item extends \Tk\Ui\Element
      */
     public function findByName($name)
     {
-        if ($this->getLink()->getText() == $name) {
+        if ($this->getLink() && $this->getLink()->getText() == $name) {
             return $this;
         }
         foreach($this->getChildren() as $item) {
@@ -390,17 +393,23 @@ class Item extends \Tk\Ui\Element
             return $template;
         }
 
-        if ($this->getLink()->getUrl()) {
-            $template->appendTemplate($this->getVar(), $this->getLink()->show());
+        if ($this->getLink()) {
+            if ($this->getLink()->getUrl()) {
+                $template->appendTemplate($this->getVar(), $this->getLink()->show());
+            } else {
+                if ($this->getLink()->getIcon()) {
+                    $template->appendTemplate($this->getVar(), $this->getLink()->getIcon()->show());
+                }
+                if ($this->getLink()->getText()) {
+                    $template->appendHtml($this->getVar(), '<span>' . $this->getLink()->getText() . '</span>');
+                }
+                if ($this->getLink()->getRightIcon()) {
+                    $template->appendTemplate($this->getVar(), $this->getLink()->getRightIcon()->show());
+                }
+            }
         } else {
-            if ($this->getLink()->getIcon()) {
-                $template->appendTemplate($this->getVar(), $this->getLink()->getIcon()->show());
-            }
-            if ($this->getLink()->getText()) {
-                $template->appendHtml($this->getVar(), '<span>' . $this->getLink()->getText() . '</span>');
-            }
-            if ($this->getLink()->getRightIcon()) {
-                $template->appendTemplate($this->getVar(), $this->getLink()->getRightIcon()->show());
+            if ($this->getName()) {
+                $template->appendHtml($this->getVar(), '<span>' . $this->getName() . '</span>');
             }
         }
 
