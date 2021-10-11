@@ -374,7 +374,7 @@ class Dialog extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
 //        if (is_callable($this->onShow)) {
 //            call_user_func_array($this->onShow, array($this));
 //        }
-
+vd('title show()');
         $template->appendTemplate('footer', $this->buttonList->show());
         $template->insertText('title', $this->getTitle());
         $template->setAttr('title', 'id', $this->getId().'-Label');
