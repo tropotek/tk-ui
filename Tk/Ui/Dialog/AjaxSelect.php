@@ -318,7 +318,7 @@ jQuery(function($) {
 
     dialog.find('.btn-search').click(function(e) {
       processing(true);
-      if (dialog.find('.input-search').val())
+      //if (dialog.find('.input-search').val())
         settings.ajaxParams.keywords = dialog.find('.input-search').val();
       $.get(settings.ajaxUrl, settings.ajaxParams, function (data) {
         var panel = dialog.find('.dialog-table').empty();
