@@ -47,6 +47,7 @@ class JsonForm extends Dialog
         $this->setButtonList(\Tk\Ui\ButtonCollection::create());
         $this->setLarge(true);
         $this->setForm($form);
+        $form->addCss('json-form');
         $this->addCss('tk-json-form');
     }
 
@@ -201,9 +202,10 @@ jQuery(function ($) {
       e.preventDefault();  // prevent form from submitting
       var f = $(this);
       var saveBtn = f.find('#'+f.attr('id')+'-save');
+      
       // Add save event to request if not already there
-      if (f.find('input[type="hidden"][name="'+saveBtn.attr('name')+'"]').length === 0) {
-        f.append('<input type="hidden" name="'+saveBtn.attr('name')+'" value="'+saveBtn.attr('value')+'" />');        
+      if (saveBtn.length > 0 && f.find('input[type="hidden"][name="'+saveBtn.attr('name')+'"]').length === 0) {
+        f.append('<input type="hidden" name="'+saveBtn.attr('name')+'" value="'+saveBtn.attr('value')+'" />');
       }
       // clear any errors
       clearErrors();
@@ -272,7 +274,8 @@ jQuery(function ($) {
     
   }
   
-  $('.modal-body form').on('init', '.modal-dialog', init).each(init);
+  $('.modal-body form.json-form').on('init', '.modal-dialog', init).each(init);
+  //$('.modal-body form').on('init', '.modal.tk-json-form', init).each(init);
 });
 JS;
         if ($this->isJsSubmit())
