@@ -1,31 +1,31 @@
 {
-  "name": "uom/tk-ui",
-  "type": "library",
-  "description": "A bootstrap based UI lib for the Tk-lib framework",
-  "keywords": [
-    "tropotek",
-    "UI",
-    "Bootstrap"
-  ],
-  "time": "2019-04-09",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Michael Mifsud",
-      "homepage": "http://www.tropotek.com/"
+    "name": "uom/tk-ui",
+    "type": "library",
+    "description": "A bootstrap based UI lib for the Tk-lib framework",
+    "keywords":  [
+        "tropotek",
+        "UI",
+        "Bootstrap"
+    ],
+    "time": "2022-03-03",
+    "license": "MIT",
+    "authors":  [
+         {
+            "name": "Michael Mifsud",
+            "homepage": "http://www.tropotek.com/"
+        }
+    ],
+    "autoload":  {
+        "psr-0":  {
+            "Tk\\": ""
+        }
+    },
+    "require":  {
+        "uom/tk-framework": "~3.2.0"
+    },
+    "extra":  {
+        "branch-alias":  {
+            "dev-master": "3.2.x-dev"
+        }
     }
-  ],
-  "autoload": {
-    "psr-0": {
-      "Tk\\": ""
-    }
-  },
-  "require": {
-    "uom/tk-framework": "~3.2.0"
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "3.2.x-dev"
-    }
-  }
 }
