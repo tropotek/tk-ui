@@ -300,7 +300,9 @@ class AjaxSelect extends Dialog
         // deprecated use onAjax callback
         $ajaxUrl = $this->getAjaxUrl()->toString();
         $actionUrl = \Tk\Uri::create()->set($this->getSelectButtonId())->toString();
-        $this->setAttr('data-ajax-url', $ajaxUrl);
+        $this->setAttr('data-ajax-url', '#');
+        if ($this->getAjaxUrl())
+            $this->setAttr('data-ajax-url', $ajaxUrl);
         $this->setAttr('data-action-url', $actionUrl);
 
         $js = <<<JS
