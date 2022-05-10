@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 3.2.2 [2022-05-11]:
+-------------------------------
+  - Added public and private report buttons and a date filter
+
+
 Ver 3.2.0 [2022-03-03]:
 -------------------------------
 
