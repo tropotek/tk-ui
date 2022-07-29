@@ -339,7 +339,6 @@ jQuery(function($) {
       $.each(data, function (i, obj) {
         var row = table.find('tr.data-tpl').clone();
         row.removeClass('data-tpl').addClass('data');
-        //vd(obj);
         var href = settings.actionUrl+'&selectedId=' + obj[settings.selectParam];
         if (!$.isEmptyObject(launchData)) {
           href += '&' + $.param(launchData);

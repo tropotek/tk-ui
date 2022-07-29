@@ -97,7 +97,6 @@ jQuery(function ($) {
       f.append('<input type="hidden" name="'+f.attr('id')+'-save" value="'+f.attr('id')+'-save" />');
       $.post(f.attr('action'), f.serialize(), function (html) {
         var newEl = $(html).find('#'+f.attr('id'));
-          console.log(newEl);
         if (!newEl.length) {
           console.error('Error: From not submitted. Invalid response from server.');
           return false;

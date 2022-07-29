@@ -246,7 +246,6 @@ jQuery(function ($) {
           });
           errHtml += '</ul>';
           errMsg += '\\n';
-          //console.log(xhr);
           dialog.trigger('DialogForm:error', [xhr, errMsg, errHtml]);
           showAlert();
         });
