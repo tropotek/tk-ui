@@ -1,6 +1,6 @@
 # Tk Auth
 
-__Project:__ [uom/tk-ui](http://packagist.org/packages/uom/tk-ui)
+__Project:__ [ttek/tk-ui](http://packagist.org/packages/ttek/tk-ui)
 __Web:__ <http://www.tropotek.com/>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
   
@@ -14,17 +14,17 @@ A bootstrap based UI lib for the Tk-lib framework
 
 ## Installation
 
-Available on Packagist ([uom/tk-form](http://packagist.org/packages/uom/tk-ui))
+Available on Packagist ([ttek/tk-form](http://packagist.org/packages/ttek/tk-ui))
 and as such installable via [Composer](http://getcomposer.org/).
 
 ```bash
-composer require uom/tk-ui
+composer require ttek/tk-ui
 ```
 
 Or add the following to your composer.json file:
 
 ```json
-"uom/tk-ui": "~3.2"
+"ttek/tk-ui": "~3.2"
 ```
 
 If you do not use Composer, you can grab the code from GitHub, and use any
