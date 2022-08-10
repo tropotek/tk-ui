@@ -9,7 +9,7 @@ use Tk\Dom\CssTrait;
 /**
  * Use this interface for all button UI objects
  *
- * @author Michael Mifsud <info@tropotek.com>
+ * @author Michael Mifsud <http://www.tropotek.com/>
  * @see http://www.tropotek.com/
  * @license Copyright 2017 Michael Mifsud
  */

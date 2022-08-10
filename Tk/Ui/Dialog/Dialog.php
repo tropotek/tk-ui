@@ -34,7 +34,7 @@ use Tk\Ui\ButtonCollection;
  *    $template->setAttr('modelBtn', 'data-toggle', 'modal');
  *    $template->setAttr('modelBtn', 'data-target', '#'.$this->dialog->getId());
  *
- * @author Michael Mifsud <info@tropotek.com>
+ * @author Michael Mifsud <http://www.tropotek.com/>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */

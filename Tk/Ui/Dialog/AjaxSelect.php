@@ -40,7 +40,7 @@ use Tk\Callback;
  *    $template->setAttr('modelBtn', 'data-toggle', 'modal');
  *    $template->setAttr('modelBtn', 'data-target', '#'.$ajaxSelect->getId());
  *
- * @author Michael Mifsud <info@tropotek.com>
+ * @author Michael Mifsud <http://www.tropotek.com/>
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */

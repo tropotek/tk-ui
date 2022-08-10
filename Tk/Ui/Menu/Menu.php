@@ -5,7 +5,7 @@ use Tk\Uri;
 use Tk\Ui\Icon;
 
 /**
- * @author Michael Mifsud <info@tropotek.com>
+ * @author Michael Mifsud <http://www.tropotek.com/>
  * @link http://www.tropotek.com/
  * @license Copyright 2018 Michael Mifsud
  */

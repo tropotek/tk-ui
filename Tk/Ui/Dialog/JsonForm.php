@@ -11,7 +11,7 @@ use Tk\Form\Field\Hidden;
  *
  * It converts the submit to a page to a returned JSON object for javascript processing
  *
- * @author Michael Mifsud <info@tropotek.com>
+ * @author Michael Mifsud <http://www.tropotek.com/>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
